@@ -1,0 +1,20 @@
+body {
+ margin: 0px;
+ padding: 0px;
+}
+
+.MuiToolbar-root{
+    padding-left: 0px !important; 
+    padding-right: 0px !important;
+    
+}
+
+.MuiButtonBase-root{
+    text-transform:none !important;
+    margin-top: 0px !important;
+    padding: 0px !important;
+}
+
+.swiper-scrollbar-drag{
+    width: 50px !important;
+}
