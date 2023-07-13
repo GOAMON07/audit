@@ -12,7 +12,7 @@ import AddTranscription from "./pages/addTranscription/index"
 import Account from "./pages/Account/index"
 
 const App = () => {
-  const acc = localStorage.getItem("accessToken")
+
 
   return (
     <BrowserRouter>

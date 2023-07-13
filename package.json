@@ -19,6 +19,7 @@
     "@mui/styles": "^5.13.2",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
+    "dayjs": "^1.11.9",
     "formik": "^2.4.1",
     "framer-motion": "^10.12.18",
     "lodash": "^4.17.21",
@@ -32,7 +33,7 @@
     "styled": "^1.0.0",
     "styled-components": "^6.0.2",
     "sweetalert2": "^11.4.8",
-    "swiper": "6.4.10",
+    "swiper": "^10.0.4",
     "update": "^0.7.4"
   },
   "devDependencies": {
