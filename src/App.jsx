@@ -10,6 +10,7 @@ import Dasborad from "./pages/Dasborad/index"
 import Transcription from "./pages/Transcription/index"
 import AddTranscription from "./pages/addTranscription/index"
 import Account from "./pages/Account/index"
+import SelectCategory from "../src/pages/addTranscription/component/catagory"
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/Transcription" element={<Transcription />} />
         <Route path="/AddTranscription" element={<AddTranscription />} />
         <Route path="/Account" element={<Account />} />
+        <Route path="/SelectCategory" element={<SelectCategory />} />
       </Routes>
     </BrowserRouter>
   );
