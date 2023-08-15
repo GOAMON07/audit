@@ -15,19 +15,35 @@ export default function index({ tabs, ...rest }) {
   const sliderRefMenu = useRef(); 
 
   const [currentTabs, setCurrentTabs] = useState(tabs);
-  const [currentSwiper, setCurentSwiper] = useState(0)
+  const [currentSwiper, setCurentSwiper] = useState(32)
+
 
   useEffect(() => {
     setCurrentTabs(tabs);
   }, [tabs]);
 
+
   useEffect(() => {
-    sliderRefContent.current.swiper.slideTo(currentSwiper);
+    console.log("currentSwiper",currentSwiper?.length);
+  }, [currentSwiper])
+  
+
+  useEffect(() => {
+    sliderRefContent.current.swiper.slideTo( currentSwiper  );
+    
   }, [currentSwiper]);
 
   useEffect(() => {
-    sliderRefMenu.current.swiper.slideTo(currentSwiper);
+    sliderRefMenu.current.swiper.slideTo(currentSwiper );
   }, [currentSwiper]);
+
+  // useEffect(() => {
+  //   sliderRefContent.current.swiper.slideTo(tabs.length - 1 );
+  // }, [tabs]);
+
+  // useEffect(() => {
+  //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
+  // }, [tabs]);
 
 
   const getTabs =  useCallback(() => {
@@ -46,7 +62,7 @@ export default function index({ tabs, ...rest }) {
         </S.SwappableTabWrapper>
       </SwiperSlide>
     )) )
-  },[currentSwiper]);
+  },[currentTabs]);
 
   const getCardContent = useCallback(() =>{
     return (
@@ -60,54 +76,35 @@ export default function index({ tabs, ...rest }) {
         setCurentSwiper(item.activeIndex)
       }}     
     >
-      <SwiperSlide>
-        <S.Card>
-          <div
-            style={{
-              height: "500px",
-              background: "CornflowerBlue",
-            }}
-          >
-            Slide 1
-          </div>
-        </S.Card>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div
-          style={{
-            height: "500px",
-            background: "Crimson",
-          }}
-        >
-          Slide 2
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div
-          style={{
-            height: "500px",
-            background: "Aquamarine",
-          }}
-        >
-          Slide 3
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div
-          style={{
-            height: "500px",
-            background: "Chartreuse",
-          }}
-        >
-          Slide 4
-        </div>
-      </SwiperSlide>
-      ...
+      { 
+      tabs.map((item) => {
+        return (
+          <>
+          <SwiperSlide key={item.id}>
+          <S.Card>
+            <div
+              style={{
+                height: "500px",
+                background: "CornflowerBlue",
+              }}
+            >
+              Slide {item.id}
+            </div>
+          </S.Card>
+        </SwiperSlide>
+          </>
+
+        )
+      })
+        
+      }
+
+      
     </Swiper>
   </S.CardOuterWrapper>
     )
 
-  },[currentSwiper])
+  },[currentSwiper,tabs])
 
   return (
     <React.Fragment>

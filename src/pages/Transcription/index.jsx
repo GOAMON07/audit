@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Navbar from "../Navbar";
-import React,{useMemo, useState,useEffect} from 'react'
+import React,{useMemo, useState,useEffect, useCallback} from 'react'
 import dayjs from 'dayjs'
 
 import Typography from "@mui/material/Typography";
@@ -11,16 +11,41 @@ import SwiperCard from "../../components/swiperCard";
 
 export default function index() {
 
-  const [date,setDate] =  useState([
-    { id: "1", label: "THIS WEEK", active: true },
-    { id: "2", label: "LAST WEEK" },
-    { id: "3", label: "29/05 - 04/06" },
-    { id: "4", label: "22/06 - 28/06" },
-    { id: "5", label: "22/04 - 28/06" },
-    { id: "6", label: "23/03 - 28/06" }
-  ])
+  const year = 2023; 
+
+  const [weeks, setWeeks] = useState([]);
 
  
+  
+
+  const generateWeeks = useCallback(() => {
+
+    let currentMonth = dayjs()
+    let date = dayjs().year(year).startOf('year').day(0); // Set to the first Sunday
+    const generatedWeeks = [];
+    let i =0
+
+    while (date.year() ===  dayjs().year() && date <= currentMonth) {
+      const startDate = date.startOf('day');
+      const endDate = date.add(6, 'day').endOf('day');
+
+      generatedWeeks.push({
+        id:i,
+        label:`${dayjs(startDate).format('DD-MM')} / ${dayjs(endDate).format('DD-MM')}`,
+        start: dayjs(startDate).format('DD-MM'),
+        end:dayjs(endDate).format('DD-MM')
+      });
+
+      date = date.add(1, 'week'); // Move to the next Sunday
+      i = i + 1;
+    }
+    setWeeks(generatedWeeks);
+  },[year]);
+
+  useEffect(() => {
+    generateWeeks();
+  }, [generateWeeks, year]);
+  
   
 
   return (
@@ -57,7 +82,8 @@ export default function index() {
       </Box>
             
       <SwiperCard
-        tabs={date}
+        tabs={weeks}
+        
       />
     </>
 
