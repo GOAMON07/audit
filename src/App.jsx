@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { BrowserRouter, NavLink, Routes, Route } from "react-router-dom";
-
+import WebFont from 'webfontloader';
 
 //page
 import Login from "./pages/Login/index";
@@ -14,8 +14,16 @@ import SelectCategory from "../src/pages/addTranscription/component/catagory"
 
 const App = () => {
 
+  WebFont.load({
+    google: {
+      families: ['Inter:400,500,600&display=swap'], // เพิ่มแบบอักษรที่คุณต้องการ
+    },
+    // ตัวเลือกอื่น ๆ
+  });
+
 
   return (
+    <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route end path="/" element={<Login />} />
@@ -28,6 +36,7 @@ const App = () => {
         <Route path="/SelectCategory" element={<SelectCategory />} />
       </Routes>
     </BrowserRouter>
+    </React.StrictMode>
   );
 };
 

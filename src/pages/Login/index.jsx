@@ -33,7 +33,7 @@ export default function login() {
       Swal.fire({
         icon: "error",
         title: "...เกิดข้อผิดพลาด",
-        text: "กรุณตรวจสอบข้อมูลของท่าน",
+        text: "กรุณตรวจสอบชื่อบัญชี และ รหัสผ่านของท่าน ของท่าน",
       });
     }
   };
@@ -104,21 +104,24 @@ export default function login() {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                marginTop: "30px",
+                marginTop: "20px",
               }}
             >
               <Button
                 variant="contained"
                 size="Larg"
                 sx={{
+                  
                   backgroundColor: "#52AA5E",
                   width: "80%",
+                  height:"32px",
                   "&:hover": {
                     backgroundColor: "#3c8e4f",
                   },
                   fontSize: "16px",
 
                   fontStyle: "Bold",
+                  
                 }}
                 onClick={() => {
                   handleLogin();

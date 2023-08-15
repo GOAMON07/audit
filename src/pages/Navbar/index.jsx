@@ -9,11 +9,12 @@ import PersonIcon from "@mui/icons-material/Person";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [selectedButton, setSelectedButton] = useState("home");
+  const [selectedButton, setSelectedButton] = useState("");
 
-  const handleButtonClick = (path = "/Dasborad") => {
+  const handleButtonClick = (path) => {
     setSelectedButton(path);
     navigate(path);
+    setStatus(path);
   };
 
   return (

@@ -26,13 +26,14 @@ export default function index() {
               height: "30px",
               color: "#4E4E4E",
               fontFamily: "Inter",
+              fontSize:"12px",
               marginLeft: "10px",
             }}
           >
             {item.spend}
           </Typography>
           <Typography
-            sx={{ color: "#ABABAB", fontFamily: "Inter", marginLeft: "10px" }}
+            sx={{ color: "#ABABAB", fontFamily: "Inter", marginLeft: "10px",fontSize:"12px", }}
           >
             {item.moneySpend}
           </Typography>
@@ -41,7 +42,7 @@ export default function index() {
       <Grid item xs={12}>
         <Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography sx={{ color: "#FF8484", fontFamily: "Inter" }}>
+            <Typography sx={{ color: "#FF8484", fontFamily: "Inter",fontSize:"12px", }}>
               {item.totalSpend}
             </Typography>
           </Box>
