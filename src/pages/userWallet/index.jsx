@@ -14,7 +14,12 @@ export const DataContext = createContext();
 export default function user() {
   let navigate = useNavigate();
   const walletMock = [
-    { walltName: "tid", idWallet: "1", detail: "เป๋าทิตเองไง",money:"฿ 9999" },
+    {
+      walltName: "tid",
+      idWallet: "1",
+      detail: "เป๋าทิตเองไง",
+      money: "฿ 9999",
+    },
     {
       walltName: "tid2",
       idWallet: "2",
@@ -36,17 +41,19 @@ export default function user() {
       <Box>
         <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end",marginTop:"10px" }}>
               <Button
                 sx={{
+                  width:"59px",
+                  height:"29px",
                   backgroundColor: "#52AA5E",
                   borderColor: "#FFF",
                   padding: "16px",
                   "&:hover": {
                     backgroundColor: "#52AA5E",
                   },
-                  marginTop: "10px",
-                  marginRight:"15px"
+
+                  marginRight: "15px",
                 }}
                 onClick={() => {
                   navigate("/AddWallet");
@@ -60,7 +67,6 @@ export default function user() {
                     transform: "translate(-50%, -50%)",
                     fontSize: "38px",
                     color: "#FFFCFC",
-                    
                   }}
                 />
               </Button>
@@ -73,11 +79,8 @@ export default function user() {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                
               }}
-              onClick={() => {
-                navigate("/Dasborad");
-              }}
+              
             >
               {walletMock.map((item) => {
                 return <Card createWallet={item} />;

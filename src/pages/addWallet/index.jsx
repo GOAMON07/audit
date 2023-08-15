@@ -15,9 +15,7 @@ export default function AddWallet() {
   const [detail, setDetail] = useState("");
   let navigate = useNavigate();
 
-  creatWallet = () =>{
-
-  }
+  
   
   return (
     <Box
@@ -50,7 +48,7 @@ export default function AddWallet() {
                         navigate("/UserWallet");
                       }}
                     >
-                      <CloseIcon />
+                      <CloseIcon sx={{marginLeft:"15px"}} />
                     </IconButton>
                     <Typography
                       variant="h1"
