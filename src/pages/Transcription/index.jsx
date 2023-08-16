@@ -3,6 +3,8 @@ import Grid from "@mui/material/Grid";
 import Navbar from "../Navbar";
 import React,{useMemo, useState,useEffect, useCallback} from 'react'
 import dayjs from 'dayjs'
+import Container01 from "../../components/tracsaction component/container01"
+import Container02 from "../../components/tracsaction component/container02"
 
 import Typography from "@mui/material/Typography";
 // import Slide from "./slide";
@@ -15,8 +17,6 @@ export default function index() {
 
   const [weeks, setWeeks] = useState([]);
 
- 
-  
 
   const generateWeeks = useCallback(() => {
 
@@ -80,11 +80,14 @@ export default function index() {
           Wallet Name
         </Typography>
       </Box>
-            
+      
       <SwiperCard
         tabs={weeks}
         
       />
+      
+      
+      
     </>
 
     
