@@ -39,6 +39,10 @@ export default function index({ tabs, ...rest }) {
   //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
   // }, [tabs]);
 
+  // useEffect(() => {
+  //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
+  // }, [tabs]);
+
   const getTabs = useCallback(() => {
     return currentTabs.map((tab, index) => (
       <SwiperSlide key={index} id="reset-wrap" style={{ width: "auto" }}>

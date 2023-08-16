@@ -18,6 +18,36 @@ export default function index() {
   const [weeks, setWeeks] = useState([]);
 
 
+  // const generateWeeks = useCallback(() => {
+
+  //   let currentMonth = dayjs()
+  //   let date = dayjs().year(year).startOf('year').day(0); // Set to the first Sunday
+  //   const generatedWeeks = [];
+  //   let i =0
+
+  //   while (date.year() ===  dayjs().year() && date <= currentMonth) {
+  //     const startDate = date.startOf('day');
+  //     const endDate = date.add(6, 'day').endOf('day');
+
+  //     generatedWeeks.push({
+  //       id:i,
+  //       label:`${dayjs(startDate).format('DD-MM')} / ${dayjs(endDate).format('DD-MM')}`,
+  //       start: dayjs(startDate).format('DD-MM'),
+  //       end:dayjs(endDate).format('DD-MM')
+  //     });
+
+  //     date = date.add(1, 'week'); // Move to the next Sunday
+  //     i = i + 1;
+  //   }
+  //   setWeeks(generatedWeeks);
+  // },[year]);
+
+  // useEffect(() => {
+  //   generateWeeks();
+  // }, [generateWeeks, year]);
+  
+  
+
   const generateWeeks = useCallback(() => {
 
     let currentMonth = dayjs()
