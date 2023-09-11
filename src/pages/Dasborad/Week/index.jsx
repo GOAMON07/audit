@@ -1,17 +1,65 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import _ from "lodash";
 
-export default function Index() {
+export default function BarChartWeek({ weekData }) {
   const chartRef = useRef(null);
+
+  const totalSpentThisWeek = useMemo(() => {
+    const outcomeAmounts =
+      weekData &&
+      weekData?.thisWeek
+        .filter((item) => item.type === "outcome")
+        .map((item) => item.amount);
+    return _.sum(outcomeAmounts ?? 0) ?? 0;
+    // if (Array.isArray(weekData.thisWeek)) {
+
+    //   const outcomeAmounts = weekData.thisWeek
+    //     .filter((item) => item.type === "outcome")
+    //     .map((item) => item.amount);
+
+    //   return _.sum(outcomeAmounts);
+    // } else {
+    //   console.log("เกิดข้อผิดพลาด");
+    // }
+  }, [weekData]);
+
+  const totalSpentLastWeek = useMemo(() => {
+    const outcomeLastWeekAmounts =
+      weekData &&
+      weekData?.lastWeek
+        .filter((item) => item.type === "outcome")
+        .map((item) => item.amount);
+
+    return _.sum(outcomeLastWeekAmounts ?? 0) ?? 0;
+    // if (Array.isArray(weekData.lastWeek)) {
+
+    //   const outcomeLastWeekAmounts = weekData.lastWeek
+    //     .filter((item) => item.type === "outcome")
+    //     .map((item) => item.amount);
+
+    //   return _.sum(outcomeLastWeekAmounts);
+    // } else {
+    //   console.log("เกิดข้อผิดพลาด");
+    // }
+  }, [weekData]);
+
+  const percentageSpendingWeek =
+    (totalSpentThisWeek / totalSpentLastWeek) * 100;
 
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");
-
     let chart;
+
+    const outcomeLastWeekAmounts = _.sum(
+      weekData &&
+        weekData?.lastWeek
+          .filter((item) => item.type === "outcome")
+          .map((item) => item.amount)
+    ) ?? 0;
 
     if (chartRef.current) {
       if (chartRef.current.chart) {
@@ -25,7 +73,7 @@ export default function Index() {
         labels: ["Last Week", "This Week"],
         datasets: [
           {
-            data: [10, 150],
+            data: [outcomeLastWeekAmounts, 100],
             backgroundColor: ["#D9D9D9", "#FF8484"],
           },
         ],
@@ -58,7 +106,7 @@ export default function Index() {
     });
 
     chartRef.current = chart;
-  }, []);
+  }, [weekData]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -76,10 +124,9 @@ export default function Index() {
                 fontSize: "16px",
                 fontFamily: "inter",
                 lineHeight: " 19.36px",
-                
               }}
             >
-              ฿ 150
+              ฿ {totalSpentThisWeek}
             </Typography>
           </Grid>
         </Grid>
@@ -93,7 +140,7 @@ export default function Index() {
                   marginLeft: "15px",
                   marginTop: "5px",
                   fontFamily: "inter",
-                  color:"#7D7D7D"
+                  color: "#7D7D7D",
                 }}
               >
                 Total spent this week
@@ -106,10 +153,10 @@ export default function Index() {
                   fontFamily: "inter",
                 }}
               >
-                0%
+                {percentageSpendingWeek}%
               </Typography>
             </Box>
-            <Box >
+            <Box>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box
@@ -117,12 +164,12 @@ export default function Index() {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      width:"245px"
-                      ,height:"230px",
-                      marginLeft:"50px"
+                      width: "245px",
+                      height: "230px",
+                      marginLeft: "50px",
                     }}
                   >
-                    <canvas  ref={chartRef} ></canvas>
+                    <canvas ref={chartRef}></canvas>
                   </Box>
                 </Grid>
               </Grid>
@@ -130,9 +177,7 @@ export default function Index() {
           </Grid>
         </Box>
       </Box>
-      <Box>
-        
-      </Box>
+      <Box></Box>
     </Box>
   );
 }

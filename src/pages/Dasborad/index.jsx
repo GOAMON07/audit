@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
+import axios from "axios";
 
 //component
 import BarChartWeek from "../Dasborad/Week";
@@ -43,7 +44,9 @@ export default function dashboard() {
   const [showBarChart, setShowBarChart] = useState(true);
   const [spending, setSpending] = useState("week");
   const [resentTransaction, setResentTransaction] = useState("week");
-
+  const [totalAmount, setTotalAmount] = useState("");
+  const [weekData, setWeekData] = useState("");
+  const [mounthData, setMounthData] = useState("");
   const classes = useStyles();
 
   const handleButtonClick = (buttonType) => {
@@ -54,13 +57,71 @@ export default function dashboard() {
   };
 
   useEffect(() => {
-    // เมื่อหน้า Dashboard โหลดครั้งแรก กำหนดค่าเริ่มต้นให้ selectedButton เป็น "week"
     setSelectedButton("week");
-    // ทำการโหลดข้อมูลตามปุ่มที่ถูกเลือก (ในที่นี้คือ "week")
     setShowBarChart(true);
     setSpending("week");
     setResentTransaction("week");
+    getAmountData();
+    getWeekData();
+    getMounthData();
   }, []);
+
+  const token = localStorage.getItem("token");
+  const getAmountData = useCallback(async () => {
+    try {
+      const responseAmount = await axios.get(
+        "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/wallet?walletId=64dd2210aadb22c062afe4ff",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (responseAmount.status === 200) {
+        const data = responseAmount.data.data;
+        setTotalAmount(data);
+      } else {
+        console.log("ไม่สามารถดึงข้อมูลได้");
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    }
+  }, []);
+
+  const getWeekData = useCallback(async () => {
+    const responseWeekData = await axios.get(
+      "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/spending?dayType=week&walletId=64dd2210aadb22c062afe4ff",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (responseWeekData.status === 200) {
+      const data = responseWeekData.data.data;
+      setWeekData(data);
+    } else {
+      console.log("ไม่สามารถเข้าถึงข้อมูลได้", err);
+    }
+  });
+
+  const getMounthData = useCallback(async () => {
+    const responseMounthData = await axios.get(
+      "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/spending?dayType=month&walletId=64dd2210aadb22c062afe4ff",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (responseMounthData.status === 200) {
+      const data = responseMounthData.data.data;
+      setMounthData(data);
+    } else {
+      console.log("ไม่สามารถเข้าถึงข้อมูลได้", err);
+    }
+  });
 
   return (
     <Box
@@ -70,7 +131,6 @@ export default function dashboard() {
         minHeight: "1085px",
         display: "flex",
         flexDirection: "column",
-        
       }}
     >
       <Box
@@ -79,7 +139,6 @@ export default function dashboard() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          
         }}
       >
         <Box>
@@ -160,12 +219,12 @@ export default function dashboard() {
                             fontSize: "16px",
                             fontFamily: "inter",
                             lineHeight: "19.36px",
-                            width: "61px",
+                            width: "auto",
                             height: "19px",
                             margin: "28px 15px 0 0 ",
                           }}
                         >
-                          ฿ 9,999
+                          ฿ {totalAmount.totalAmount}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -250,9 +309,9 @@ export default function dashboard() {
             </Grid>
           </Grid>
           {showBarChart && selectedButton === "week" ? (
-            <BarChartWeek />
+            <BarChartWeek weekData={weekData} />
           ) : (
-            <BarChartMounth />
+            <BarChartMounth mounthData={mounthData} />
           )}
           <Box>
             <Grid container spacing={2}>
@@ -288,9 +347,9 @@ export default function dashboard() {
                   }}
                 >
                   {spending && showBarChart && selectedButton === "week" ? (
-                    <SpendingCardWeek />
+                    <SpendingCardWeek weekData={weekData} />
                   ) : (
-                    <SpendingCardMounth />
+                    <SpendingCardMounth mounthData={mounthData} />
                   )}
                 </Box>
               </Grid>
@@ -334,14 +393,14 @@ export default function dashboard() {
                   overflowX: "hidden",
                   overflowY: "scroll",
                   borderRadius: "10px",
-                  marginTop: "10px",
+                  marginTop: "15px",
                   backgroundColor: "#FFFFFF",
                 }}
               >
                 {resentTransaction === "week" ? (
-                  <RecentTransactionWeek />
+                  <RecentTransactionWeek weekData={weekData} />
                 ) : (
-                  <RecentTransactionMounth />
+                  <RecentTransactionMounth mounthData={mounthData} />
                 )}
               </Box>
             </Grid>

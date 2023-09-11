@@ -1,32 +1,46 @@
-import React, { useContext, useState, createContext } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 //component
 import Card from "../userWallet/compnent/card/index";
 
-export const DataContext = createContext();
-
 export default function user() {
   let navigate = useNavigate();
-  const walletMock = [
-    {
-      walltName: "tid",
-      idWallet: "1",
-      detail: "เป๋าทิตเองไง",
-      money: "฿ 9999",
-    },
-    {
-      walltName: "tid2",
-      idWallet: "2",
-      detail: "เป๋าทิต2เองไงasdasdasdasdasdasdasdasd",
-    },
-    { walltName: "tid", idWallet: "1", detail: "เป๋าทิตเองไง" },
-  ];
+  const [walletData, setWalletData] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  const getData = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/wallet?userId=64dd0397eaebfbb752bcb1c7",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        setWalletData(data);
+      } else {
+        console.log("ไม่สามารถดึงข้อมูลได้");
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Box
@@ -36,16 +50,23 @@ export default function user() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
+        overflowX: "none",
       }}
     >
       <Box>
         <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end",marginTop:"10px" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "10px",
+              }}
+            >
               <Button
                 sx={{
-                  width:"59px",
-                  height:"29px",
+                  width: "59px",
+                  height: "29px",
                   backgroundColor: "#52AA5E",
                   borderColor: "#FFF",
                   padding: "16px",
@@ -80,9 +101,8 @@ export default function user() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              
             >
-              {walletMock.map((item) => {
+              {walletData.map((item) => {
                 return <Card createWallet={item} />;
               })}
             </Box>
@@ -91,7 +111,7 @@ export default function user() {
             item
             xs={12}
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: 0,
               left: "50%",
               transform: "translateX(-50%)",

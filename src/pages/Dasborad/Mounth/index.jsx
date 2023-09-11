@@ -1,23 +1,49 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect , useMemo} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import _ from "lodash";
 
-export default function Index() {
+export default function BarChartMounth({ mounthData }) {
   const chartRef = useRef(null);
+
+  const totalSpentThisMounth = useMemo(() => {
+    if (Array.isArray(mounthData.thisMonth)) {
+      const outcomeAmounts = mounthData.thisMonth
+        .filter((item) => item.type === "outcome")
+        .map((item) => item.amount);
+
+      return _.sum(outcomeAmounts);
+    } else {
+      console.log("เกิดข้อผิดพลาด");
+    }
+  }, [mounthData.thisMonth]);
+
+  const totalSpentLastMounth = useMemo(() => {
+    if (Array.isArray(mounthData.lastMonth)) {
+      const outcomeAmounts = mounthData.lastMonth
+        .filter((item) => item.type === "outcome")
+        .map((item) => item.amount);
+
+      return _.sum(outcomeAmounts);
+    } else {
+      console.log("เกิดข้อผิดพลาด");
+    }
+  }, [mounthData.lastMonth]);
+
+  const percentageSpendingMounth = (totalSpentThisMounth / totalSpentLastMounth) * 100;
 
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");
 
     let chart;
 
-    if (chartRef.current) {
-      if (chartRef.current.chart) {
-        chartRef.current.chart.destroy();
-      }
-    }
+    // if (chartRef.current) {
+    //   if (chartRef.current.chart) {
+    //     chartRef.current.chart.destroy();
+    //   }
+    // }
 
     chart = new Chart(ctx, {
       type: "bar",
@@ -25,7 +51,7 @@ export default function Index() {
         labels: ["Last Mounth", "This Mounth"],
         datasets: [
           {
-            data: [10, 150],
+            data: [totalSpentLastMounth, totalSpentThisMounth],
             backgroundColor: ["#D9D9D9", "#FF8484"],
           },
         ],
@@ -58,7 +84,7 @@ export default function Index() {
     });
 
     chartRef.current = chart;
-  }, []);
+  }, [totalSpentThisMounth,totalSpentLastMounth]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -68,7 +94,7 @@ export default function Index() {
             <Typography
               variant="h1"
               sx={{
-                width: "44px",
+                width: "auto",
                 height: "19px",
                 marginLeft: "15px",
                 marginTop: "20px",
@@ -78,7 +104,7 @@ export default function Index() {
                 lineHeight: " 19.36px",
               }}
             >
-              ฿ 150
+              ฿ {totalSpentThisMounth}
             </Typography>
           </Grid>
         </Grid>
@@ -92,7 +118,7 @@ export default function Index() {
                   marginLeft: "15px",
                   marginTop: "5px",
                   fontFamily: "inter",
-                  color:"#7D7D7D"
+                  color: "#7D7D7D",
                 }}
               >
                 Total spent this mounth
@@ -105,10 +131,10 @@ export default function Index() {
                   fontFamily: "inter",
                 }}
               >
-                0%
+                {percentageSpendingMounth}%
               </Typography>
             </Box>
-            <Box >
+            <Box>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Box
@@ -116,12 +142,12 @@ export default function Index() {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      width:"245px"
-                      ,height:"230px",
-                      marginLeft:"50px"
+                      width: "245px",
+                      height: "230px",
+                      marginLeft: "50px",
                     }}
                   >
-                    <canvas  ref={chartRef} ></canvas>
+                    <canvas ref={chartRef}></canvas>
                   </Box>
                 </Grid>
               </Grid>
@@ -129,9 +155,7 @@ export default function Index() {
           </Grid>
         </Box>
       </Box>
-      <Box>
-        
-      </Box>
+      <Box></Box>
     </Box>
   );
 }
