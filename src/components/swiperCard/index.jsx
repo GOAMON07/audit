@@ -45,6 +45,11 @@ export default function index({ tabs, ...rest }) {
   //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
   // }, [tabs]);
 
+  useEffect(() => {
+    console.log("tabs=>",tabs);
+  }, [tabs])
+  
+
 
   const getTabs =  useCallback(() => {
     return (
@@ -53,7 +58,8 @@ export default function index({ tabs, ...rest }) {
         <S.SwappableTabWrapper>
           <S.SwappableTab
             onClick={() => {
-              console.log(index);
+              const find = tabs.find((item) => { return item.id === index})
+              console.log("tab=>",find);
               setCurentSwiper(index)
             }}
           >
@@ -89,6 +95,7 @@ export default function index({ tabs, ...rest }) {
               }}
             >
               Slide {item.id}
+              
             </div>
           </S.Card>
         </SwiperSlide>
