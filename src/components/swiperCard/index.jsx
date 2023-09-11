@@ -39,9 +39,11 @@ export default function index({ tabs, ...rest }) {
   //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
   // }, [tabs]);
 
-  // useEffect(() => {
-  //   sliderRefMenu.current.swiper.slideTo(tabs.length - 1);
-  // }, [tabs]);
+  useEffect(() => {
+    console.log("tabs=>",tabs);
+  }, [tabs])
+  
+
 
   const getTabs = useCallback(() => {
     return currentTabs.map((tab, index) => (
@@ -49,8 +51,9 @@ export default function index({ tabs, ...rest }) {
         <S.SwappableTabWrapper>
           <S.SwappableTab
             onClick={() => {
-              console.log(index);
-              setCurentSwiper(index);
+              const find = tabs.find((item) => { return item.id === index})
+              console.log("tab=>",find);
+              setCurentSwiper(index)
             }}
           >
             {tab.label}
@@ -62,38 +65,46 @@ export default function index({ tabs, ...rest }) {
 
   const getCardContent = useCallback(() => {
     return (
-      <S.CardOuterWrapper className="cardOuterWrapper">
-        <Swiper
-          // install Swiper modules
-          pagination={{ totalClass: "swiper-pagination", clickable: true }}
-          slidesPerView={"auto"}
-          ref={sliderRefContent}
-          onSlideChange={(item) => {
-            setCurentSwiper(item.activeIndex);
-          }}
-        >
-          {tabs.map((item) => {
-            return (
-              <>
-                <SwiperSlide key={item.id}>
-                  <S.Card>
-                    <div
-                      style={{
-                        height: "500px",
-                        background: "CornflowerBlue",
-                      }}
-                    >
-                      Slide {item.id}
-                    </div>
-                  </S.Card>
-                </SwiperSlide>
-              </>
-            );
-          })}
-        </Swiper>
-      </S.CardOuterWrapper>
-    );
-  }, [currentSwiper, tabs]);
+    <S.CardOuterWrapper className="cardOuterWrapper">
+    <Swiper
+      // install Swiper modules
+      pagination={{ totalClass: "swiper-pagination", clickable: true }}
+      slidesPerView={"auto"}
+      ref={sliderRefContent}  
+      onSlideChange={(item) => {
+        setCurentSwiper(item.activeIndex)
+      }}     
+    >
+      { 
+      tabs.map((item) => {
+        return (
+          <>
+          <SwiperSlide key={item.id}>
+          <S.Card>
+            <div
+              style={{
+                height: "500px",
+                background: "CornflowerBlue",
+              }}
+            >
+              Slide {item.id}
+              
+            </div>
+          </S.Card>
+        </SwiperSlide>
+          </>
+
+        )
+      })
+        
+      }
+
+      
+    </Swiper>
+  </S.CardOuterWrapper>
+    )
+
+  },[currentSwiper,tabs])
 
   return (
     <React.Fragment>
