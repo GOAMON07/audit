@@ -21,7 +21,7 @@ import Navbar from "../Navbar/index";
 const useStyles = makeStyles({
   buttonGroup: {
     borderRadius: "10px",
-    marginTop: "2px",
+    marginTop: "5px",
     backgroundColor: "#F0F0F0",
     "& .MuiButton-root": {
       width: "147px",
@@ -31,9 +31,6 @@ const useStyles = makeStyles({
       marginTop: "2px",
       border: "none",
       outline: "none",
-      "&:hover": {
-        backgroundColor: "#F0F0F0",
-      },
     },
     "& .MuiButton-containedPrimary": {
       backgroundColor: "#ffffff",
@@ -56,15 +53,24 @@ export default function dashboard() {
     setResentTransaction(buttonType);
   };
 
+  useEffect(() => {
+    // เมื่อหน้า Dashboard โหลดครั้งแรก กำหนดค่าเริ่มต้นให้ selectedButton เป็น "week"
+    setSelectedButton("week");
+    // ทำการโหลดข้อมูลตามปุ่มที่ถูกเลือก (ในที่นี้คือ "week")
+    setShowBarChart(true);
+    setSpending("week");
+    setResentTransaction("week");
+  }, []);
+
   return (
     <Box
       sx={{
         backgroundColor: "#F5F5F5",
-        minWidth: "100vw",
+        minWidth: "375px",
         minHeight: "1085px",
         display: "flex",
         flexDirection: "column",
-        overflowX: "hidden",
+        
       }}
     >
       <Box
@@ -73,6 +79,7 @@ export default function dashboard() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          
         }}
       >
         <Box>
@@ -86,8 +93,7 @@ export default function dashboard() {
                   borderRadius: "10px",
                   marginBottom: "20px",
                   marginTop: "20px",
-                  overflow: "hidden",
-                  overflowX: "hidden",
+                  overflowY: "hidden",
                 }}
               >
                 <Box>

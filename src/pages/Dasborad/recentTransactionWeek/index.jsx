@@ -24,17 +24,18 @@ export default function index() {
       totalSpend: "33%",
       date: " 11 jube 2023",
     },
+    
   ];
   return spendingMock.map((item) => (
-    <Box sx={{ display: "flex", flexDirection: "row" ,width:"340px",marginLeft:"20px" }}>
+    <Box sx={{ display: "flex", flexDirection: "row" ,width:"344px",marginLeft:"20px" }}>
       <Grid item xs={12}>
         <Box>
           <Avatar
             sx={{
               width: "39px",
               height: "36px",
-              marginTop: "7px",
-              marginRight: "5px",
+              marginTop: "5px",
+              marginLeft:"3px"
             }}
           ></Avatar>
         </Box>
@@ -44,14 +45,15 @@ export default function index() {
           <Typography
             sx={{
               width: "240px",
-              height: "30px",
+              height: "35px",
               color: "#4E4E4E",
               fontFamily: "Inter",
+              fontSize:"12px",
             }}
           >
             {item.spend}
           </Typography>
-          <Typography sx={{ color: "#ABABAB", fontFamily: "Inter" }}>
+          <Typography sx={{ color: "#ABABAB", fontFamily: "Inter",fontSize:"12px", }}>
             {item.date}
           </Typography>
         </Box>
@@ -62,7 +64,7 @@ export default function index() {
             <Typography
               sx={{
                 color: item.spend === "Income" ? "#76B5FF" : "#FF8484",
-                fontFamily: "Inter",
+                fontFamily: "Inter",fontSize:"12px",
               }}
             >
               {item.moneySpend}

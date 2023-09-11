@@ -3,8 +3,11 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import { useNavigate } from "react-router-dom";
 
 export default function BasicCard(props) {
+  let navigate = useNavigate();
+
   return (
     <Box>
       <Grid container spacing={2}>
@@ -18,6 +21,13 @@ export default function BasicCard(props) {
               marginBottom: "20px",
               marginTop: "20px",
               overflow: "hidden",
+              ":hover": {
+                backgroundColor: "#ffffff",
+                border: "1px solid #7d82e3"
+              },
+            }}
+            onClick={() => {
+              navigate("/Dasborad");
             }}
           >
             <Box>
