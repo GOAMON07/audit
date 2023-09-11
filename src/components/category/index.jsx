@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import AppBar from "@mui/material/AppBar";
@@ -6,20 +6,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import WestIcon from "@mui/icons-material/West";
-import { useNavigate } from "react-router-dom";
-import { CategoryContext } from "../../";
 
-export default function Category() {
-  const { selectedCategory, setSelectedCategory } = useContext(CategoryContext);
-  const navigate = useNavigate();
-
-  const handleSelectCategory = (category) => {
-    setSelectedCategory(category);
-    navigate("/AddTranscription");
-  };
-  
- 
-
+export default function Category(props) {
   return (
     <Box
       sx={{
@@ -43,7 +31,7 @@ export default function Category() {
                   aria-label="menu"
                   sx={{ mr: 2 }}
                   onClick={() => {
-                    navigate("/AddTranscription");
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <WestIcon sx={{ marginLeft: "20px", color: "#7A7A7A" }} />
@@ -103,9 +91,14 @@ export default function Category() {
                     alignItems: "center",
                     marginLeft: "15px",
                     marginTop: "10px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Food");
+                    props.setSelectedCategory({
+                      category: "Food",
+                      type: "outcome",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -125,7 +118,6 @@ export default function Category() {
                     }}
                   >
                     Food
-                    
                   </Typography>
                 </Box>
               </Box>
@@ -149,9 +141,14 @@ export default function Category() {
                     alignItems: "center",
                     marginLeft: "15px",
                     marginTop: "5px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Transportation");
+                    props.setSelectedCategory({
+                      category: "transportation",
+                      type: "outcome",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -163,15 +160,14 @@ export default function Category() {
                       marginRight: "15px",
                     }}
                   ></span>
-                  <Typography 
+                  <Typography
                     sx={{
                       fontFamily: "inter",
                       fontSize: "16px",
                       color: "#7D7D7D",
                     }}
-                    
                   >
-                   Transportation
+                    Transportation
                   </Typography>
                 </Box>
               </Box>
@@ -195,9 +191,14 @@ export default function Category() {
                     alignItems: "center",
                     marginLeft: "15px",
                     marginTop: "5px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Rentals");
+                    props.setSelectedCategory({
+                      category: "Rentals",
+                      type: "outcome",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -239,9 +240,14 @@ export default function Category() {
                     display: "flex",
                     alignItems: "center",
                     marginLeft: "15px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Other");
+                    props.setSelectedCategory({
+                      category: "Other",
+                      type: "outcome",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -304,9 +310,14 @@ export default function Category() {
                     alignItems: "center",
                     marginLeft: "15px",
                     marginTop: "15px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Salary");
+                    props.setSelectedCategory({
+                      category: "Salary",
+                      type: "Income",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -325,7 +336,7 @@ export default function Category() {
                       color: "#7D7D7D",
                     }}
                   >
-                   Salary
+                    Salary
                   </Typography>
                 </Box>
               </Box>
@@ -349,9 +360,14 @@ export default function Category() {
                     alignItems: "center",
                     marginLeft: "15px",
                     marginTop: "3px",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
-                    handleSelectCategory("Other Income");
+                    props.setSelectedCategory({
+                      category: "Other_Income",
+                      type: "Income",
+                    });
+                    props.setisSelectCategory(false);
                   }}
                 >
                   <span
@@ -370,7 +386,7 @@ export default function Category() {
                       color: "#7D7D7D",
                     }}
                   >
-                   Other Income
+                    Other Income
                   </Typography>
                 </Box>
               </Box>

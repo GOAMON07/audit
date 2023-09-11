@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -10,10 +10,36 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PersonIcon from "@mui/icons-material/Person";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
 
 export default function index() {
   const navigate = useNavigate();
   const [selectedButton, setSelectedButton] = useState("home");
+  const [acountData ,setAcountData] =useState("")
+  const token = localStorage.getItem("token");
+  const getAcountData = useCallback(async () => {
+    try {
+      const responseAcount = await axios.get(
+        "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/auth/account?userId=64dd0397eaebfbb752bcb1c7",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (responseAcount.status === 200) {
+        const data = responseAcount.data.data;
+        console.log(data);
+        setAcountData(data)
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    }
+  });
+  useEffect(() => {
+    getAcountData();
+  }, []);
+
   const handleButtonClick = (path) => {
     setSelectedButton(path);
     navigate(path);
@@ -107,7 +133,7 @@ export default function index() {
                         marginLeft: "10px",
                       }}
                     >
-                      Suntiver6
+                      {acountData.username}
                     </Typography>
                   </Box>
                 </Grid>
@@ -121,7 +147,7 @@ export default function index() {
                         color: "#7D7D7D",
                       }}
                     >
-                      suntiver6@gmail.com
+                      {acountData.emial}
                     </Typography>
                   </Box>
                 </Grid>
@@ -137,11 +163,10 @@ export default function index() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          width:"100vw"
-          
+          width: "100vw",
         }}
       >
-        <Box sx={{marginRight:"150px"}}>
+        <Box sx={{ marginRight: "150px" }}>
           <Grid item xs={12}>
             <Box
               sx={{
@@ -272,7 +297,6 @@ export default function index() {
               }}
               onClick={() => {
                 navigate("/");
-                
               }}
             >
               <span
@@ -290,7 +314,6 @@ export default function index() {
                   fontSize: "15px",
                   color: "#4E4E4E",
                 }}
-                
               >
                 Logout
               </Typography>

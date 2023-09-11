@@ -1,12 +1,51 @@
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function BasicCard(props) {
+export default function BasicCard({ createWallet }) {
   let navigate = useNavigate();
+
+  const handleWalletClick = (walletId) => {
+    const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+
+    const newData = {
+      idWallet: walletId,
+    };
+
+    const updateDataLocalStroage = {
+      ...userProfile,
+      ...newData,
+    };
+
+    localStorage.setItem("userProfile", JSON.stringify(updateDataLocalStroage));
+    navigate("/Dasborad");
+  };
+  // useEffect(() => {
+  //   if (idWallet) {
+  //     const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+
+  //     const newData = {
+  //       idWallet: createWallet.walletId,
+  //     };
+
+  //     const updateDataLocalStroage = {
+  //       ...userProfile,
+  //       ...newData,
+  //     };
+
+  //     localStorage.setItem(
+  //       "userProfile",
+  //       JSON.stringify(updateDataLocalStroage)
+  //     );
+  //     navigate("/Dasborad");
+
+  //   }
+  // }, [idWallet]);
 
   return (
     <Box>
@@ -23,14 +62,15 @@ export default function BasicCard(props) {
               overflow: "hidden",
               ":hover": {
                 backgroundColor: "#ffffff",
-                border: "1px solid #7d82e3"
+                border: "1px solid #7d82e3",
+                cursor: "pointer",
               },
             }}
             onClick={() => {
-              navigate("/Dasborad");
+              handleWalletClick(createWallet.walletId);
             }}
           >
-            <Box>
+            <Box sx={{ display: "flex" }}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <Typography
@@ -45,6 +85,9 @@ export default function BasicCard(props) {
                   </Typography>
                 </Grid>
               </Grid>
+              <IconButton sx={{ mr: 1 }}>
+                <CloseIcon sx={{ color: "-moz-initial" }} />
+              </IconButton>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
               <Grid container spacing={1}>
@@ -68,7 +111,7 @@ export default function BasicCard(props) {
                         fontStyle: "Regular",
                       }}
                     >
-                      {props.createWallet.walltName}
+                      {createWallet.walletName}
                     </Typography>
                   </Box>
                 </Grid>
@@ -86,7 +129,7 @@ export default function BasicCard(props) {
                         fontStyle: "Regular",
                       }}
                     >
-                      {props.createWallet.detail}
+                      {createWallet.detail}
                     </Typography>
                   </Box>
                 </Grid>

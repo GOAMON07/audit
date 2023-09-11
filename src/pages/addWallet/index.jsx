@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,27 +9,58 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function AddWallet() {
   const [walletName, setWalletName] = useState("");
   const [detail, setDetail] = useState("");
   let navigate = useNavigate();
 
-  
-  
+  const submitAddData = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    const data = localStorage.getItem("userProfile");
+    const { userId } = JSON.parse(data);
+
+    try {
+      const response = await axios.post(
+        "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/wallet",
+        { walletName, detail, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          text: "บันทึกข้อมูลสำเร็จ",
+        });
+        navigate("/UserWallet");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "...เกิดข้อผิดพลาด",
+      });
+    }
+  }, [walletName, detail]);
+
   return (
     <Box
       sx={{
         backgroundColor: "#F5F5F5",
-        minWidth:'100vw',
-        minHeight:'100vh'
+        minWidth: "100vw",
+        minHeight: "100vh",
       }}
     >
       <Box
         sx={{
           display: "flex",
-          justifyContent:'center'
-          ,alignItems:'center'
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Box>
@@ -48,7 +79,7 @@ export default function AddWallet() {
                         navigate("/UserWallet");
                       }}
                     >
-                      <CloseIcon sx={{marginLeft:"15px"}} />
+                      <CloseIcon sx={{ marginLeft: "15px" }} />
                     </IconButton>
                     <Typography
                       variant="h1"
@@ -72,6 +103,7 @@ export default function AddWallet() {
                         fontFamily: "inter",
                         textTransform: "none",
                       }}
+                      onClick={submitAddData}
                     >
                       save
                     </Button>
