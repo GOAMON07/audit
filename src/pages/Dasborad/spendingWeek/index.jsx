@@ -7,7 +7,7 @@ import _ from "lodash";
 
 export default function SpendingWeek({ weekData }) {
   const outcomeData = useMemo(() => {
-    const outcomeItems = _.filter(weekData.thisWeek, { type: "outcome" });
+    const outcomeItems = _.filter(weekData?.thisWeek, { type: "outcome" });
 
     const sortedOutcomeItems = _.orderBy(outcomeItems, ["amount"], ["desc"]);
 
@@ -33,11 +33,11 @@ export default function SpendingWeek({ weekData }) {
     return {
       TopTwoOutcomeAndPercentageDataItems,
     };
-  }, [weekData.thisWeek]);
+  }, [weekData?.thisWeek]);
 
   return (
     <div>
-      {outcomeData.TopTwoOutcomeAndPercentageDataItems.map((item) => (
+      {outcomeData?.TopTwoOutcomeAndPercentageDataItems?.map((item) => (
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <Grid item xs={12}>
             <Box>

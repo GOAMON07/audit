@@ -7,7 +7,7 @@ import _ from "lodash";
 
 export default function recentTracsactionsWeek({ mounthData }) {
   const outcomeMounthData = useMemo(() => {
-    const data = _.map(mounthData.thisMonth);
+    const data = _.map(mounthData?.thisMonth);
 
     const totalOutcomeAmount = _.sumBy(data, "amount");
 
@@ -17,7 +17,7 @@ export default function recentTracsactionsWeek({ mounthData }) {
     }));
 
     return { percentageData };
-  }, [mounthData.thisMonth]);
+  }, [mounthData?.thisMonth]);
 
   function formatDate(isoDate) {
     const date = new Date(isoDate);

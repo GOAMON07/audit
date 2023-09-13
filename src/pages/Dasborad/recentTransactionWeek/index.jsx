@@ -7,7 +7,7 @@ import _ from "lodash";
 
 export default function recentTracsactionsWeek({ weekData }) {
   const outcomeWeekData = useMemo(() => {
-    const data = _.map(weekData.thisWeek);
+    const data = _.map(weekData?.thisWeek);
 
     const totalOutcomeAmount = _.sumBy(data, "amount");
 
@@ -17,7 +17,7 @@ export default function recentTracsactionsWeek({ weekData }) {
     }));
 
     return { percentageData };
-  }, [weekData.thisWeek]);
+  }, [weekData?.thisWeek]);
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -27,7 +27,7 @@ export default function recentTracsactionsWeek({ weekData }) {
 
   return (
     <div>
-      {outcomeWeekData.percentageData.map((item) => (
+      {outcomeWeekData?.percentageData?.map((item) => (
         <Box
           sx={{
             display: "flex",
