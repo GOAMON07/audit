@@ -7,7 +7,7 @@ import _ from "lodash";
 
 export default function SpendingMounth({ mounthData }) {
   const outcomeData = useMemo(() => {
-    const outcomeItems = _.filter(mounthData.thisMonth, { type: "outcome" });
+    const outcomeItems = _.filter(mounthData?.thisMonth, { type: "outcome" });
 
     const sortedOutcomeItems = _.orderBy(outcomeItems, ["amount"], ["desc"]);
 
@@ -33,10 +33,10 @@ export default function SpendingMounth({ mounthData }) {
     return {
       TopTwoOutcomeAndPercentageDataItems,
     };
-  }, [mounthData.thisMonth]);
+  }, [mounthData?.thisMonth]);
   return (
     <div>
-      {outcomeData.TopTwoOutcomeAndPercentageDataItems.map((item) => (
+      {outcomeData?.TopTwoOutcomeAndPercentageDataItems?.map((item) => (
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <Grid item xs={12}>
             <Box>

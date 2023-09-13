@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useCallback } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { useNavigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import makeStyles from "@mui/styles/makeStyles";
-import axios from "axios";
+import  { useCallback, useEffect, useState } from "react";
+
+//API
+import { getAmountAPI, getTransactionAPI } from "../../module/dashbord/dashbordCrud";
 
 //component
-import BarChartWeek from "../Dasborad/Week";
 import BarChartMounth from "../Dasborad/Mounth";
-import SpendingCardWeek from "./spendingWeek/index";
-import SpendingCardMounth from "./spendingMounth/index";
-import RecentTransactionWeek from "./recentTransactionWeek";
-import RecentTransactionMounth from "./recentTransactionMounth";
+import BarChartWeek from "../Dasborad/Week";
 import Navbar from "../Navbar/index";
+import RecentTransactionMounth from "./recentTransactionMounth";
+import RecentTransactionWeek from "./recentTransactionWeek";
+import SpendingCardMounth from "./spendingMounth/index";
+import SpendingCardWeek from "./spendingWeek/index";
 
 //button style
 const useStyles = makeStyles({
@@ -41,87 +42,61 @@ const useStyles = makeStyles({
 
 export default function dashboard() {
   const [selectedButton, setSelectedButton] = useState("week");
-  const [showBarChart, setShowBarChart] = useState(true);
-  const [spending, setSpending] = useState("week");
-  const [resentTransaction, setResentTransaction] = useState("week");
-  const [totalAmount, setTotalAmount] = useState("");
-  const [weekData, setWeekData] = useState("");
-  const [mounthData, setMounthData] = useState("");
+  const [isLoading,setIsLoading] = useState(false)
+  const [transactions,setTransactions] = useState(null)
+  const [totalAmount, setTotalAmount] = useState(0);
+
   const classes = useStyles();
 
-  const handleButtonClick = (buttonType) => {
-    setSelectedButton(buttonType);
-    setShowBarChart(true);
-    setSpending(buttonType);
-    setResentTransaction(buttonType);
-  };
-
-  useEffect(() => {
-    setSelectedButton("week");
-    setShowBarChart(true);
-    setSpending("week");
-    setResentTransaction("week");
-    getAmountData();
-    getWeekData();
-    getMounthData();
-  }, []);
-
-  const token = localStorage.getItem("token");
+ 
   const getAmountData = useCallback(async () => {
+    setIsLoading(true)
     try {
-      const responseAmount = await axios.get(
-        "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/wallet?walletId=64dd2210aadb22c062afe4ff",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const responseAmount = await getAmountAPI()
 
-      if (responseAmount.status === 200) {
-        const data = responseAmount.data.data;
-        setTotalAmount(data);
-      } else {
+      if(responseAmount.status === "success"){
+        setTotalAmount(responseAmount.data);
+     
+      }else{
         console.log("ไม่สามารถดึงข้อมูลได้");
       }
+     
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    }finally{
+      setIsLoading(false)
     }
   }, []);
 
-  const getWeekData = useCallback(async () => {
-    const responseWeekData = await axios.get(
-      "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/spending?dayType=week&walletId=64dd2210aadb22c062afe4ff",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (responseWeekData.status === 200) {
-      const data = responseWeekData.data.data;
-      setWeekData(data);
-    } else {
-      console.log("ไม่สามารถเข้าถึงข้อมูลได้", err);
-    }
-  });
+  
+  
+  const getTransaction = useCallback(async (dayType="week") => {
+    setIsLoading(true)
+    try {
+      const response = await getTransactionAPI(dayType)
 
-  const getMounthData = useCallback(async () => {
-    const responseMounthData = await axios.get(
-      "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/dashbord/spending?dayType=month&walletId=64dd2210aadb22c062afe4ff",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      if(response.status === "success"){
+        setTransactions(response.data);
+      }else{
+        console.log("ไม่สามารถดึงข้อมูลได้");
       }
-    );
-    if (responseMounthData.status === 200) {
-      const data = responseMounthData.data.data;
-      setMounthData(data);
-    } else {
-      console.log("ไม่สามารถเข้าถึงข้อมูลได้", err);
+     
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    }finally{
+      setIsLoading(false)
     }
-  });
+  }, []);
+
+
+  useEffect(() => {
+      getAmountData()
+      getTransaction("week")
+  }, [])
+
+
+  
+  
 
   return (
     <Box
@@ -224,7 +199,7 @@ export default function dashboard() {
                             margin: "28px 15px 0 0 ",
                           }}
                         >
-                          ฿ {totalAmount.totalAmount}
+                          ฿ {totalAmount?.totalAmount?.toFixed(2)}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -289,7 +264,10 @@ export default function dashboard() {
                   <ButtonGroup className={classes.buttonGroup}>
                     <Button
                       variant={selectedButton === "week" ? "contained" : "text"}
-                      onClick={() => handleButtonClick("week")}
+                      onClick={() => {
+                        setSelectedButton("week")
+                        getTransaction("week")
+                      }}
                     >
                       Week
                     </Button>
@@ -297,9 +275,12 @@ export default function dashboard() {
                   <ButtonGroup className={classes.buttonGroup}>
                     <Button
                       variant={
-                        selectedButton === "mounth" ? "contained" : "text"
+                        selectedButton === "month" ? "contained" : "text"
                       }
-                      onClick={() => handleButtonClick("mounth")}
+                      onClick={() => {
+                        setSelectedButton("month")
+                        getTransaction("month")
+                      }}
                     >
                       Mounth
                     </Button>
@@ -308,10 +289,10 @@ export default function dashboard() {
               </Box>
             </Grid>
           </Grid>
-          {showBarChart && selectedButton === "week" ? (
-            <BarChartWeek weekData={weekData} />
+          {selectedButton === "week" ? (
+            <BarChartWeek weekData={transactions} />
           ) : (
-            <BarChartMounth mounthData={mounthData} />
+            <BarChartMounth mounthData={transactions} />
           )}
           <Box>
             <Grid container spacing={2}>
@@ -346,10 +327,10 @@ export default function dashboard() {
                     marginTop: "10px",
                   }}
                 >
-                  {spending && showBarChart && selectedButton === "week" ? (
-                    <SpendingCardWeek weekData={weekData} />
+                  {selectedButton === "week"  ? (
+                    <SpendingCardWeek weekData={transactions} />
                   ) : (
-                    <SpendingCardMounth mounthData={mounthData} />
+                    <SpendingCardMounth mounthData={transactions} />
                   )}
                 </Box>
               </Grid>
@@ -395,12 +376,13 @@ export default function dashboard() {
                   borderRadius: "10px",
                   marginTop: "15px",
                   backgroundColor: "#FFFFFF",
+                  padding:"40px 2px 0px 1px"
                 }}
               >
-                {resentTransaction === "week" ? (
-                  <RecentTransactionWeek weekData={weekData} />
+                {selectedButton === "week" ? (
+                  <RecentTransactionWeek weekData={transactions} />
                 ) : (
-                  <RecentTransactionMounth mounthData={mounthData} />
+                  <RecentTransactionMounth mounthData={transactions} />
                 )}
               </Box>
             </Grid>

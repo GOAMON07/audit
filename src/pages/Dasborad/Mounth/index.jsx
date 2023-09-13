@@ -9,7 +9,7 @@ export default function BarChartMounth({ mounthData }) {
   const chartRef = useRef(null);
 
   const totalSpentThisMounth = useMemo(() => {
-    if (Array.isArray(mounthData.thisMonth)) {
+    if (Array.isArray(mounthData?.thisMonth)) {
       const outcomeAmounts = mounthData.thisMonth
         .filter((item) => item.type === "outcome")
         .map((item) => item.amount);
@@ -18,7 +18,7 @@ export default function BarChartMounth({ mounthData }) {
     } else {
       console.log("เกิดข้อผิดพลาด");
     }
-  }, [mounthData.thisMonth]);
+  }, [mounthData?.thisMonth]);
 
   const totalSpentLastMounth = useMemo(() => {
     if (Array.isArray(mounthData.lastMonth)) {
@@ -30,9 +30,9 @@ export default function BarChartMounth({ mounthData }) {
     } else {
       console.log("เกิดข้อผิดพลาด");
     }
-  }, [mounthData.lastMonth]);
+  }, [mounthData?.lastMonth]);
 
-  const percentageSpendingMounth = (totalSpentThisMounth / totalSpentLastMounth) * 100;
+  const percentageSpendingMounth = ((totalSpentThisMounth / totalSpentLastMounth) * 100).toFixed(2);
 
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");

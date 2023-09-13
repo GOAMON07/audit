@@ -1,112 +1,41 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Chart from "chart.js/auto";
+import Typography from "@mui/material/Typography";
+import  { useMemo } from "react";
 import _ from "lodash";
+import { Bar } from "react-chartjs-2";
+
 
 export default function BarChartWeek({ weekData }) {
-  const chartRef = useRef(null);
+
 
   const totalSpentThisWeek = useMemo(() => {
     const outcomeAmounts =
       weekData &&
       weekData?.thisWeek
-        .filter((item) => item.type === "outcome")
-        .map((item) => item.amount);
+        ?.filter((item) => item.type === "outcome")
+        ?.map((item) => item.amount);
     return _.sum(outcomeAmounts ?? 0) ?? 0;
-    // if (Array.isArray(weekData.thisWeek)) {
-
-    //   const outcomeAmounts = weekData.thisWeek
-    //     .filter((item) => item.type === "outcome")
-    //     .map((item) => item.amount);
-
-    //   return _.sum(outcomeAmounts);
-    // } else {
-    //   console.log("เกิดข้อผิดพลาด");
-    // }
-  }, [weekData]);
+    
+  }, [weekData?.thisWeek]);
 
   const totalSpentLastWeek = useMemo(() => {
     const outcomeLastWeekAmounts =
       weekData &&
       weekData?.lastWeek
-        .filter((item) => item.type === "outcome")
-        .map((item) => item.amount);
+        ?.filter((item) => item.type === "outcome")
+        ?.map((item) => item.amount);
 
     return _.sum(outcomeLastWeekAmounts ?? 0) ?? 0;
-    // if (Array.isArray(weekData.lastWeek)) {
 
-    //   const outcomeLastWeekAmounts = weekData.lastWeek
-    //     .filter((item) => item.type === "outcome")
-    //     .map((item) => item.amount);
+  }, [weekData?.lastWeek]);
 
-    //   return _.sum(outcomeLastWeekAmounts);
-    // } else {
-    //   console.log("เกิดข้อผิดพลาด");
-    // }
-  }, [weekData]);
+  const percentageSpendingWeek = (
+    (totalSpentThisWeek / totalSpentLastWeek) *
+    100
+  ).toFixed(2) ;
 
-  const percentageSpendingWeek =
-    (totalSpentThisWeek / totalSpentLastWeek) * 100;
 
-  useEffect(() => {
-    const ctx = chartRef.current.getContext("2d");
-    let chart;
-
-    const outcomeLastWeekAmounts = _.sum(
-      weekData &&
-        weekData?.lastWeek
-          .filter((item) => item.type === "outcome")
-          .map((item) => item.amount)
-    ) ?? 0;
-
-    if (chartRef.current) {
-      if (chartRef.current.chart) {
-        chartRef.current.chart.destroy();
-      }
-    }
-
-    chart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Last Week", "This Week"],
-        datasets: [
-          {
-            data: [outcomeLastWeekAmounts, 100],
-            backgroundColor: ["#D9D9D9", "#FF8484"],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            type: "linear",
-            position: "right",
-            display: true,
-            grid: {
-              display: false, // ปิดการแสดงเส้นกริดในแกน y
-            },
-            ticks: {
-              display: true,
-            },
-          },
-        },
-        plugins: {
-          legend: {
-            display: false, // ปิดการแสดงตัวหมาย
-          },
-          datalabels: {
-            display: false, // ปิดการแสดงตัวหมายในแผนก
-          },
-        },
-      },
-    });
-
-    chartRef.current = chart;
-  }, [weekData]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -126,7 +55,7 @@ export default function BarChartWeek({ weekData }) {
                 lineHeight: " 19.36px",
               }}
             >
-              ฿ {totalSpentThisWeek}
+              ฿  {totalSpentThisWeek}
             </Typography>
           </Grid>
         </Grid>
@@ -153,7 +82,7 @@ export default function BarChartWeek({ weekData }) {
                   fontFamily: "inter",
                 }}
               >
-                {percentageSpendingWeek}%
+                { isNaN(percentageSpendingWeek) ? 0 : percentageSpendingWeek} %
               </Typography>
             </Box>
             <Box>
@@ -169,7 +98,44 @@ export default function BarChartWeek({ weekData }) {
                       marginLeft: "50px",
                     }}
                   >
-                    <canvas ref={chartRef}></canvas>
+                    <Bar
+                      data={{
+                        labels: ["Last Week", "This Week"],
+                        datasets: [
+                          {
+                            data: [totalSpentLastWeek, totalSpentThisWeek],
+                            backgroundColor: ["#D9D9D9", "#FF8484"],
+                          },
+                        ],
+                      }}
+
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          y: {
+                            type: "linear",
+                            position: "right",
+                            display: true,
+                            grid: {
+                              display: false, // ปิดการแสดงเส้นกริดในแกน y
+                            },
+                            ticks: {
+                              display: true,
+                            },
+                          },
+                        },
+                        plugins: {
+                          legend: {
+                            display: false, // ปิดการแสดงตัวหมาย
+                          },
+                          datalabels: {
+                            display: false, // ปิดการแสดงตัวหมายในแผนก
+                          },
+                        },
+                      }}
+                    />
+                   
                   </Box>
                 </Grid>
               </Grid>
