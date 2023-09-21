@@ -3,7 +3,8 @@ import customAxios from "../../setup/customAxios";
 const GETAMOUNTAPI = `/api/dashbord/wallet/`;
 const GETTRANSACTION  =`/api/dashbord/spending`
 const walletId = JSON.parse(localStorage?.getItem("userProfile") ?? {}
-)?.idWallet;
+)?.idWallet
+
 
 export async function getAmountAPI() {
   try {
@@ -19,6 +20,24 @@ export async function getAmountAPI() {
       return null;
     } else {
       throw new Error("func=getAmountAPI,error=", error);
+    }
+  }
+}
+
+export async function postAmountAPI(user) {
+  try {
+    const res = await customAxios.post(`${GETAMOUNTAPI}?walletId=${walletId}`,{userId:user});
+    if (!res.data) {
+      throw new Error("func=postAmountAPI,error=Data Error");
+    }
+
+    return res.data;
+  } catch (error) {
+    if (customAxios.isCancel(error)) {
+      console.log("Request canceled : ", error?.message);
+      return null;
+    } else {
+      throw new Error("func=postAmountAPI,error=", error);
     }
   }
 }

@@ -1,90 +1,37 @@
-import React, { useRef, useEffect , useMemo} from "react";
+import React, { useMemo } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Chart from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 import _ from "lodash";
+import { Chart, registerables} from 'chart.js/auto';
+
+Chart.register(...registerables);
 
 export default function BarChartMounth({ mounthData }) {
-  const chartRef = useRef(null);
-
   const totalSpentThisMounth = useMemo(() => {
-    if (Array.isArray(mounthData?.thisMonth)) {
-      const outcomeAmounts = mounthData.thisMonth
-        .filter((item) => item.type === "outcome")
-        .map((item) => item.amount);
-
-      return _.sum(outcomeAmounts);
-    } else {
-      console.log("เกิดข้อผิดพลาด");
-    }
+    const outcomeThisMounthAmounts =
+      mounthData &&
+      mounthData?.thisMonth
+        ?.filter((item) => item.type === "outcome")
+        ?.map((item) => item.amount);
+    return _.sum(outcomeThisMounthAmounts ?? 0) ?? 0;
   }, [mounthData?.thisMonth]);
 
   const totalSpentLastMounth = useMemo(() => {
-    if (Array.isArray(mounthData.lastMonth)) {
-      const outcomeAmounts = mounthData.lastMonth
-        .filter((item) => item.type === "outcome")
-        .map((item) => item.amount);
+    const outcomeLastMounthAmounts =
+      mounthData &&
+      mounthData?.thisMonth
+        ?.filter((item) => item.type === "outcome")
+        ?.map((item) => item.amount);
 
-      return _.sum(outcomeAmounts);
-    } else {
-      console.log("เกิดข้อผิดพลาด");
-    }
-  }, [mounthData?.lastMonth]);
+    return _.sum(outcomeLastMounthAmounts ?? 0) ?? 0;
+  }, [mounthData?.thisMonth]);
 
-  const percentageSpendingMounth = ((totalSpentThisMounth / totalSpentLastMounth) * 100).toFixed(2);
-
-  useEffect(() => {
-    const ctx = chartRef.current.getContext("2d");
-
-    let chart;
-
-    // if (chartRef.current) {
-    //   if (chartRef.current.chart) {
-    //     chartRef.current.chart.destroy();
-    //   }
-    // }
-
-    chart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Last Mounth", "This Mounth"],
-        datasets: [
-          {
-            data: [totalSpentLastMounth, totalSpentThisMounth],
-            backgroundColor: ["#D9D9D9", "#FF8484"],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            type: "linear",
-            position: "right",
-            display: true,
-            grid: {
-              display: false, // ปิดการแสดงเส้นกริดในแกน y
-            },
-            ticks: {
-              display: true,
-            },
-          },
-        },
-        plugins: {
-          legend: {
-            display: false, // ปิดการแสดงตัวหมาย
-          },
-          datalabels: {
-            display: false, // ปิดการแสดงตัวหมายในแผนก
-          },
-        },
-      },
-    });
-
-    chartRef.current = chart;
-  }, [totalSpentThisMounth,totalSpentLastMounth]);
+  const percentageSpendingMounth = (
+    (totalSpentThisMounth / totalSpentLastMounth) *
+    100
+  ).toFixed(0);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -131,7 +78,7 @@ export default function BarChartMounth({ mounthData }) {
                   fontFamily: "inter",
                 }}
               >
-                {percentageSpendingMounth}%
+                {isNaN(percentageSpendingMounth) ? 0 : percentageSpendingMounth} %
               </Typography>
             </Box>
             <Box>
@@ -147,7 +94,42 @@ export default function BarChartMounth({ mounthData }) {
                       marginLeft: "50px",
                     }}
                   >
-                    <canvas ref={chartRef}></canvas>
+                    <Bar
+                      data={{
+                        labels: ["Last Mounth", "This Mounth"],
+                        datasets: [
+                          {
+                            data: [totalSpentLastMounth, totalSpentThisMounth],
+                            backgroundColor: ["#D9D9D9", "#FF8484"],
+                          },
+                        ],
+                      }}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          y: {
+                            type: "linear",
+                            position: "right",
+                            display: true,
+                            grid: {
+                              display: false, // ปิดการแสดงเส้นกริดในแกน y
+                            },
+                            ticks: {
+                              display: true,
+                            },
+                          },
+                        },
+                        plugins: {
+                          legend: {
+                            display: false, // ปิดการแสดงตัวหมาย
+                          },
+                          datalabels: {
+                            display: false, // ปิดการแสดงตัวหมายในแผนก
+                          },
+                        },
+                      }}
+                    />
                   </Box>
                 </Grid>
               </Grid>
@@ -155,7 +137,6 @@ export default function BarChartMounth({ mounthData }) {
           </Grid>
         </Box>
       </Box>
-      <Box></Box>
-    </Box>
+     </Box>
   );
 }

@@ -1,14 +1,14 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import  { useMemo } from "react";
+import { useMemo } from "react";
 import _ from "lodash";
 import { Bar } from "react-chartjs-2";
+import { Chart, registerables} from 'chart.js/auto';
 
+Chart.register(...registerables);
 
 export default function BarChartWeek({ weekData }) {
-
-
   const totalSpentThisWeek = useMemo(() => {
     const outcomeAmounts =
       weekData &&
@@ -16,7 +16,6 @@ export default function BarChartWeek({ weekData }) {
         ?.filter((item) => item.type === "outcome")
         ?.map((item) => item.amount);
     return _.sum(outcomeAmounts ?? 0) ?? 0;
-    
   }, [weekData?.thisWeek]);
 
   const totalSpentLastWeek = useMemo(() => {
@@ -27,15 +26,12 @@ export default function BarChartWeek({ weekData }) {
         ?.map((item) => item.amount);
 
     return _.sum(outcomeLastWeekAmounts ?? 0) ?? 0;
-
   }, [weekData?.lastWeek]);
 
   const percentageSpendingWeek = (
     (totalSpentThisWeek / totalSpentLastWeek) *
     100
-  ).toFixed(2) ;
-
-
+  ).toFixed(0);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -45,7 +41,7 @@ export default function BarChartWeek({ weekData }) {
             <Typography
               variant="h1"
               sx={{
-                width: "44px",
+                width: "auto",
                 height: "19px",
                 marginLeft: "15px",
                 marginTop: "20px",
@@ -55,7 +51,7 @@ export default function BarChartWeek({ weekData }) {
                 lineHeight: " 19.36px",
               }}
             >
-              ฿  {totalSpentThisWeek}
+              ฿ {totalSpentThisWeek}
             </Typography>
           </Grid>
         </Grid>
@@ -82,7 +78,7 @@ export default function BarChartWeek({ weekData }) {
                   fontFamily: "inter",
                 }}
               >
-                { isNaN(percentageSpendingWeek) ? 0 : percentageSpendingWeek} %
+                {isNaN(percentageSpendingWeek) ? 0 : percentageSpendingWeek} %
               </Typography>
             </Box>
             <Box>
@@ -108,7 +104,6 @@ export default function BarChartWeek({ weekData }) {
                           },
                         ],
                       }}
-
                       options={{
                         responsive: true,
                         maintainAspectRatio: false,
@@ -135,7 +130,6 @@ export default function BarChartWeek({ weekData }) {
                         },
                       }}
                     />
-                   
                   </Box>
                 </Grid>
               </Grid>
@@ -143,7 +137,6 @@ export default function BarChartWeek({ weekData }) {
           </Grid>
         </Box>
       </Box>
-      <Box></Box>
     </Box>
   );
 }

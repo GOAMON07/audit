@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import Loading from "../../Loading";
 
 //component
 import Card from "../userWallet/compnent/card/index";
@@ -13,10 +14,12 @@ import Card from "../userWallet/compnent/card/index";
 export default function user() {
   let navigate = useNavigate();
   const [walletData, setWalletData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const token = localStorage.getItem("token");
 
   const getData = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/wallet?userId=64dd0397eaebfbb752bcb1c7",
@@ -35,6 +38,8 @@ export default function user() {
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -93,20 +98,26 @@ export default function user() {
               </Button>
             </Box>
           </Grid>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {walletData.map((item) => {
-                return <Card createWallet={item} />;
-              })}
-            </Box>
-          </Grid>
+
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {walletData.map((item) => {
+                  return <Card createWallet={item} />;
+                })}
+              </Box>
+            </Grid>
+          )}
+
           <Grid
             item
             xs={12}

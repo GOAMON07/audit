@@ -39,4 +39,6 @@ export const CardOuterWrapper = styled.div`
   margin-top: -8px;
 `
 
-export const Card = styled.div``
+export const Card = styled.div`
+height: "700px";
+`
