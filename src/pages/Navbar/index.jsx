@@ -14,7 +14,6 @@ export default function Navbar() {
   const handleButtonClick = (path) => {
     setSelectedButton(path);
     navigate(path);
-    setStatus(path);
   };
 
   return (

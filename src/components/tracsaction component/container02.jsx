@@ -1,178 +1,202 @@
-import React from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import _ from "lodash";
+import dayjs from "dayjs";
+import Avatar from "@mui/material/Avatar";
 
-export default function container02({
-  day = 11,
-  M = "June",
-  Y = "2023",
-  defualtIncome = 10000,
-  defualtOutcome = 2000,
-}) {
-  const result = defualtIncome - defualtOutcome;
+
+export default function container02({ transactionData, dataDate }) {
+  const combinedData = useMemo(() => {
+    // แปลง dataDate เป็นรูปแบบวันที่ 'DD/MM/YYYY'
+    const startDate = new Date(dataDate.start);
+    const endDate = new Date(dataDate.end);
+    const dateLabels = [];
+    while (startDate <= endDate) {
+      dateLabels.push(startDate.toLocaleDateString("en-GB"));
+      startDate.setDate(startDate.getDate() + 1);
+    }
+
+    const combinedData = dateLabels.map((dateLabel) => {
+      const transactions =
+        transactionData &&
+        transactionData?.data?.filter((transaction) => {
+          const dateTransaction = new Date(
+            transaction.transactionDate
+          ).toLocaleDateString("en-GB");
+          return dateTransaction === dateLabel;
+        });
+
+      if (transactions && transactions.length > 0) {
+        return {
+          [dateLabel]: transactions,
+        };
+      } else {
+        return { [dateLabel]: [] };
+      }
+    });
+
+    return combinedData;
+  }, [dataDate, transactionData]);
+
+  const totalAmountTransaction = useCallback(
+    (dataItem) => {
+      return _.sumBy(dataItem, "amount") ?? "0";
+    },
+    [combinedData]
+  );
+
+  const formattedValueTransactionAmount = useCallback(
+    (dataItem) => {
+      const chang = Number(totalAmountTransaction(dataItem)).toLocaleString(
+        "en-US"
+      );
+      return chang;
+    },
+    [totalAmountTransaction]
+  );
+
+  const formatAmount = useCallback(
+    (dataItem) => {
+      const chang = Number(dataItem).toLocaleString("en-US");
+      return chang;
+    },
+    [combinedData]
+  );
+
   return (
-    <Box sx={{ width: "100vw", height: "208px" }}>
-      <Box
-        sx={{
-          height: "50px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#6D6D6D",
-              fontSize: "40px",
-              width: "36px",
-              hight: "48px",
-              lineHeight: "48.41px",
-              marginLeft: "10px",
-            }}
-          >
-            {day}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "10px",
-              marginLeft: "15px",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "12px",
-                width: "68px",
-                hight: "15px",
-                lineHeight: "14.52px",
-                color: "#6D6D6D",
-              }}
-            >
-              LAST WEEK
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "12px",
-                width: "61px",
-                hight: "15px",
-                lineHeight: "14.52px",
-                color: "#CCC9C9",
-              }}
-            >
-              {M} {Y}
-            </Typography>
-          </Box>
-        </Box>
-        <Box>
-          <Typography
-            sx={{
-              color: "#6D6D6D",
-              fontSize: "12px",
-              marginTop: "10px",
-              marginRight: "10px",
-              alignItems: "center",
-            }}
-          >
-            {result}
-          </Typography>
-        </Box>
-      </Box>
-      <Divider />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "158px",
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                marginLeft: "15px",
-                marginTop: "20px",
-              }}
-            >
-              <span
-                style={{
-                  backgroundColor: "#D9D9D9",
-                  borderRadius: "50%",
-                  width: "39px",
-                  height: "36px",
-                  marginRight: "15px",
+    <div
+      style={{ height: "500px", overflowY: "scroll", paddingBottom: "200px" }}
+    >
+      {combinedData.map((dataItem, index) => (
+        <div key={index}>
+          {Object.keys(dataItem).map((dateLabel) => (
+            <div key={dateLabel}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "auto",
+                  height: "200px",
                 }}
-              ></span>
-              <Typography sx={{ fontSize: "12px", color: "#4E4E4E" }}>
-                Food & Beverage
-              </Typography>
-            </Box>
-          </Grid>
-          <Box>
-            <Typography
-              sx={{
-                color: "#6D6D6D",
-                fontSize: "12px",
-                marginTop: "30px",
-                marginRight: "10px",
-                alignItems: "center",
-                color:"#FF8484"
-              }}
-            >
-              {defualtOutcome}
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                marginLeft: "15px",
-                marginTop: "20px",
-              }}
-            >
-              <span
-                style={{
-                  backgroundColor: "#D9D9D9",
-                  borderRadius: "50%",
-                  width: "39px",
-                  height: "36px",
-                  marginRight: "15px",
-                }}
-              ></span>
-              <Typography sx={{ fontSize: "12px", color: "#4E4E4E" }}>
-                Food & Beverage
-              </Typography>
-            </Box>
-          </Grid>
-          <Box>
-            <Typography
-              sx={{
-                color: "#6d6d70",
-                fontSize: "12px",
-                marginTop: "28px",
-                marginRight: "10px",
-                alignItems: "center",
-                color: "#76B5FF",
-              }}
-            >
-              {defualtIncome}
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+              >
+                <Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          color: "#6D6D6D",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        {dateLabel}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography
+                        sx={{ fontSize: "14px", marginRight: "10px",color:"#6D6D6D" }}
+                      >
+                        {formattedValueTransactionAmount(dataItem[dateLabel])}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Divider />
+
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  {dataItem[dateLabel].length > 0 ? (
+                    dataItem[dateLabel].map((transaction, transactionIndex) => (
+                      <React.Fragment key={transactionIndex}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                            }}
+                          >
+                            <Grid item xs={12}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginLeft: "15px",
+                                  marginTop: "15px",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    backgroundColor: "#D9D9D9",
+                                    borderRadius: "50%",
+                                    width: "26px",
+                                    height: "25px",
+                                    marginRight: "15px",
+                                  }}
+                                ></span>
+                                <Typography
+                                  sx={{
+                                    fontFamily: "inter",
+                                    fontSize: "15px",
+                                    color: "#4E4E4E",
+                                  }}
+                                >
+                                  {transaction.category}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color:
+                                  transaction.type === "income"
+                                    ? "#76B5FF"
+                                    : "#FF8484",
+                                fontSize: "14px",
+                                marginRight: "10px",
+                                marginTop: "15px",
+                              }}
+                            >
+                              {formatAmount(transaction.amount)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "50px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", color: "#4E4E4E" }}>
+                        Not have transaction.
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }

@@ -145,7 +145,7 @@ export default function Category(props) {
                   }}
                   onClick={() => {
                     props.setSelectedCategory({
-                      category: "transportation",
+                      category: "Transportation",
                       type: "outcome",
                     });
                     props.setisSelectCategory(false);
@@ -315,7 +315,7 @@ export default function Category(props) {
                   onClick={() => {
                     props.setSelectedCategory({
                       category: "Salary",
-                      type: "Income",
+                      type: "income",
                     });
                     props.setisSelectCategory(false);
                   }}
@@ -365,7 +365,7 @@ export default function Category(props) {
                   onClick={() => {
                     props.setSelectedCategory({
                       category: "Other_Income",
-                      type: "Income",
+                      type: "income",
                     });
                     props.setisSelectCategory(false);
                   }}
