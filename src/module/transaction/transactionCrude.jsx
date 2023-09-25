@@ -1,9 +1,10 @@
 import customAxios from "../../setup/customAxios";
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const GETDATATRANSACTION = `/api/transaction`;
-const walletId = JSON.parse(
-  localStorage?.getItem("userProfile") ?? {}
-)?.idWallet;
+const dataFromLocalStroage = localStorage.getItem("userProfile");
+const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
 
 export async function getDataTransactionAPI(dateTimes) {
   try {
@@ -12,6 +13,11 @@ export async function getDataTransactionAPI(dateTimes) {
     );
     if (!res.data) {
       throw new Error("func=getDataTransactionAPI,error=Data Error");
+    }
+    if (!walletId) {
+      <Navigate to="/UserWallet" replace />;
+    } else {
+      <Navigate to="/Login" replace />;
     }
 
     return res.data;
