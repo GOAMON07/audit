@@ -1,9 +1,12 @@
 import customAxios from "../../setup/customAxios";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const GETAMOUNTAPI = `/api/dashbord/wallet/`;
-const GETTRANSACTION  =`/api/dashbord/spending`
-const walletId = JSON.parse(localStorage?.getItem("userProfile") ?? {}
-)?.idWallet
+const GETTRANSACTION = `/api/dashbord/spending`;
+const dataFromLocalStroage = localStorage.getItem("userProfile");
+const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
+
 
 
 export async function getAmountAPI() {
@@ -11,6 +14,11 @@ export async function getAmountAPI() {
     const res = await customAxios.get(`${GETAMOUNTAPI}?walletId=${walletId}`);
     if (!res.data) {
       throw new Error("func=getAmountAPI,error=Data Error");
+    }
+    if (!walletId) {
+      <Navigate to="/UserWallet" replace />;
+    } else {
+      <Navigate to="/Login" replace />;
     }
 
     return res.data;
@@ -26,7 +34,9 @@ export async function getAmountAPI() {
 
 export async function postAmountAPI(user) {
   try {
-    const res = await customAxios.post(`${GETAMOUNTAPI}?walletId=${walletId}`,{userId:user});
+    const res = await customAxios.post(`${GETAMOUNTAPI}?walletId=${walletId}`, {
+      userId: user,
+    });
     if (!res.data) {
       throw new Error("func=postAmountAPI,error=Data Error");
     }
@@ -42,12 +52,11 @@ export async function postAmountAPI(user) {
   }
 }
 
-
-export async function getTransactionAPI(
-  dayType = "week"
-) {
+export async function getTransactionAPI(dayType = "week") {
   try {
-    const res = await customAxios.get(`${GETTRANSACTION}?walletId=${walletId}&dayType=${dayType}`);
+    const res = await customAxios.get(
+      `${GETTRANSACTION}?walletId=${walletId}&dayType=${dayType}`
+    );
     if (!res.data) {
       throw new Error("func=getTransactionAPI,error=Data Error");
     }

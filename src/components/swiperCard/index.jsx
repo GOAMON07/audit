@@ -177,9 +177,9 @@ export default function index({ tabs, ...rest }) {
 
   return (
     <div>
-      {isLoading ? (
-        <Loading />
-      ) : (
+      
+        <Loading loading={isLoading}/>
+      
         <React.Fragment>
           <Swiper
             freeMode
@@ -195,7 +195,7 @@ export default function index({ tabs, ...rest }) {
           </Swiper>
           {getCardContent()}
         </React.Fragment>
-      )}
+     
     </div>
   );
 }
