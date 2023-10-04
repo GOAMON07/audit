@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 
 //API
 import { getAmountAPI } from "../../module/dashbord/dashbordCrud";
+import { getDataWalletAPI } from "../../module/wallet/walletCrude";
 
 import SwiperCard from "../../components/swiperCard";
 import axios from "axios";
@@ -20,6 +21,7 @@ export default function index() {
   const [weeks, setWeeks] = useState([]);
   const [DatatotalAmount, setDataTotalAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [dataWallet, setDataWallet] = useState("");
 
   const getAmountData = useCallback(async () => {
     setIsLoading(true);
@@ -36,7 +38,22 @@ export default function index() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isLoading]);
+
+  const getWalletData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await getDataWalletAPI();
+      if (res) {
+        setDataWallet(res[0]);
+        console.log("ข้อมูลที่ได้จาก wallet", res[0].walletName);
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, dataWallet]);
 
   const formatTotalAmountValue = Number(
     DatatotalAmount.totalAmount
@@ -70,7 +87,7 @@ export default function index() {
   useEffect(() => {
     generateWeeks();
     getAmountData();
-    console.log(weeks);
+    getWalletData();
   }, [generateWeeks, year]);
 
   return (
@@ -96,18 +113,18 @@ export default function index() {
         </Typography>
         <Typography
           sx={{
-            fontSize: "12px",
+            fontSize: "16px",
             fontFamily: "Inter",
             marginTop: "5px",
             color: "#6D6D6D",
           }}
         >
-          Wallet Name
+          {dataWallet.walletName}
         </Typography>
       </Box>
 
       <SwiperCard tabs={weeks} />
-      <Navbar/>
+      <Navbar />
     </div>
   );
 }

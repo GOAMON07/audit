@@ -46,7 +46,7 @@ const RoutesPage = () => {
           <Route index element={<Navigate to="/Login" />} />
         </>
       ) : (
-        <Route path="/" element={<Navigate to="/" replace />} />
+        <Route path="/Login" element={<Navigate to="/" replace />} />
       )}
 
       <Route path="/" element={<Outlet />}>
@@ -71,7 +71,8 @@ const RoutesPage = () => {
           path="/UserWallet"
           element={
             <PrivateWalletIdRoute>
-              <UserWallet />
+              {" "}
+              <UserWallet />{" "}
             </PrivateWalletIdRoute>
           }
         />

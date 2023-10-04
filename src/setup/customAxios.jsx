@@ -1,8 +1,10 @@
 // customAxios.js
 import axios from 'axios';
 
+
 const token = localStorage.getItem("token");
 const API_URL = process.env.REACT_APP_API_DEV_URL ?? "api";
+
 
 // Create a custom Axios instance
 const customAxios = axios.create({

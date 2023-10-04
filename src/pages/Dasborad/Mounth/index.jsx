@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo,useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -32,6 +32,10 @@ export default function BarChartMounth({ mounthData }) {
     (totalSpentThisMounth / totalSpentLastMounth) *
     100
   ).toFixed(0);
+  useEffect(() => {
+   console.log("assssssss",mounthData);
+  }, [])
+  
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>

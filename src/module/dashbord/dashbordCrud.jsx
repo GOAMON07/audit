@@ -2,12 +2,12 @@ import customAxios from "../../setup/customAxios";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+
+
 const GETAMOUNTAPI = `/api/dashbord/wallet/`;
 const GETTRANSACTION = `/api/dashbord/spending`;
 const dataFromLocalStroage = localStorage.getItem("userProfile");
 const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
-
-
 
 export async function getAmountAPI() {
   try {
@@ -32,6 +32,8 @@ export async function getAmountAPI() {
   }
 }
 
+
+
 export async function postAmountAPI(user) {
   try {
     const res = await customAxios.post(`${GETAMOUNTAPI}?walletId=${walletId}`, {
@@ -52,7 +54,7 @@ export async function postAmountAPI(user) {
   }
 }
 
-export async function getTransactionAPI(dayType = "week") {
+export async function getTransactionAPI(dayType) {
   try {
     const res = await customAxios.get(
       `${GETTRANSACTION}?walletId=${walletId}&dayType=${dayType}`
@@ -71,3 +73,5 @@ export async function getTransactionAPI(dayType = "week") {
     }
   }
 }
+
+

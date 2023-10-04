@@ -42,7 +42,7 @@ export default function SpendingMounth({ mounthData }) {
             <Grid item xs={12}>
               <Box>
                 <Avatar
-                  sx={{ width: "39px", height: "36px", marginTop: "3px" }}
+                  sx={{ width: "39px", height: "36px",  marginTop: "3px",marginLeft:"0px" }}
                 ></Avatar>
               </Box>
             </Grid>
@@ -74,7 +74,7 @@ export default function SpendingMounth({ mounthData }) {
             </Grid>
             <Grid item xs={12}>
               <Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between",marginLeft:"15px" }}>
                   <Typography
                     sx={{
                       color: "#FF8484",

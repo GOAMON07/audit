@@ -12,6 +12,7 @@ import {
   getAmountAPI,
   getTransactionAPI,
 } from "../../module/dashbord/dashbordCrud";
+import { getDataWalletAPI } from "../../module/wallet/walletCrude";
 
 //component
 import BarChartMounth from "../Dasborad/Mounth";
@@ -47,8 +48,9 @@ const useStyles = makeStyles({
 export default function dashboard() {
   const [selectedButton, setSelectedButton] = useState("week");
   const [isLoading, setIsLoading] = useState(false);
-  const [transactions, setTransactions] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [dataWallet, setDataWallet] = useState("");
 
   const classes = useStyles();
 
@@ -69,13 +71,14 @@ export default function dashboard() {
     }
   }, []);
 
-  const getTransaction = useCallback(async (dayType = "week") => {
+  const getTransaction = useCallback(async (dayType) => {
     setIsLoading(true);
     try {
       const response = await getTransactionAPI(dayType);
 
       if (response.status === "success") {
         setTransactions(response.data);
+        console.log(response.data);
       } else {
         console.log("ไม่สามารถดึงข้อมูลได้");
       }
@@ -86,10 +89,25 @@ export default function dashboard() {
     }
   }, []);
 
+  const getWalletData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await getDataWalletAPI();
+      if (res) {
+        setDataWallet(res[0]);
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading]);
+
   useEffect(() => {
     getAmountData();
-    getTransaction("week");
-  }, []);
+    getTransaction(selectedButton);
+    getWalletData();
+  }, [getAmountData, getTransaction]);
 
   return (
     <div>
@@ -137,7 +155,7 @@ export default function dashboard() {
                             marginTop: "5px",
                           }}
                         >
-                          My Wallet
+                          My Wallet : {dataWallet.walletName}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -326,10 +344,18 @@ export default function dashboard() {
                       marginTop: "10px",
                     }}
                   >
-                    {selectedButton === "week" ? (
-                      <SpendingCardWeek weekData={transactions} />
+                    {!transactions?.thisWeek?.length ? (
+                      <div style={{ color: "#6D6D6D", fontSize: "12px" }}>
+                        NO TOP SPENDING DATA
+                      </div>
                     ) : (
-                      <SpendingCardMounth mounthData={transactions} />
+                      <div>
+                        {selectedButton === "week" ? (
+                          <SpendingCardWeek weekData={transactions} />
+                        ) : (
+                          <SpendingCardMounth mounthData={transactions} />
+                        )}
+                      </div>
                     )}
                   </Box>
                 </Grid>
@@ -378,10 +404,18 @@ export default function dashboard() {
                     backgroundColor: "#FFFFFF",
                   }}
                 >
-                  {selectedButton === "week" ? (
-                    <RecentTransactionWeek weekData={transactions} />
+                  {!transactions?.thisWeek?.length ? (
+                    <div style={{ color: "#6D6D6D", fontSize: "12px" }}>
+                      NO TOP SPENDING DATA
+                    </div>
                   ) : (
-                    <RecentTransactionMounth mounthData={transactions} />
+                    <div>
+                      {selectedButton === "week" ? (
+                        <RecentTransactionWeek weekData={transactions} />
+                      ) : (
+                        <RecentTransactionMounth mounthData={transactions} />
+                      )}
+                    </div>
                   )}
                 </Box>
               </Grid>

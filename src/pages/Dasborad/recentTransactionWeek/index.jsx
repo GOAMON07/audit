@@ -34,7 +34,6 @@ export default function recentTracsactionsWeek({ weekData }) {
               display: "flex",
               flexDirection: "row",
               width: "344px",
-              marginLeft: "20px",
             }}
           >
             <Grid item xs={12}>
@@ -43,8 +42,8 @@ export default function recentTracsactionsWeek({ weekData }) {
                   sx={{
                     width: "39px",
                     height: "36px",
-                    marginTop: "5px",
-                    marginLeft: "3px",
+                    marginTop: "12px",
+                    marginLeft: "14px",
                   }}
                 ></Avatar>
               </Box>
@@ -59,6 +58,7 @@ export default function recentTracsactionsWeek({ weekData }) {
                     fontFamily: "Inter",
                     fontSize: "12px",
                     marginTop: "10px",
+                    marginLeft: "10px",
                   }}
                 >
                   {item.category}
@@ -68,6 +68,7 @@ export default function recentTracsactionsWeek({ weekData }) {
                     color: "#ABABAB",
                     fontFamily: "Inter",
                     fontSize: "12px",
+                    marginLeft: "10px",
                   }}
                 >
                   {formatDate(item.transactionDate)}
@@ -79,10 +80,10 @@ export default function recentTracsactionsWeek({ weekData }) {
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography
                     sx={{
-                      color: item.spend === "type" ? "#76B5FF" : "#FF8484",
+                      color: item.type === "income" ? "#76B5FF" : "#FF8484",
                       fontFamily: "Inter",
                       fontSize: "12px",
-                      marginTop: "10px",
+                      marginTop: "12px",
                     }}
                   >
                     {item.percentage}%

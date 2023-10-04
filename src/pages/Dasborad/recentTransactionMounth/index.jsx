@@ -46,7 +46,7 @@ export default function recentTracsactionsWeek({ mounthData }) {
                     width: "39px",
                     height: "36px",
                     marginTop: "5px",
-                    marginLeft: "3px",
+                    marginLeft: "8px",
                   }}
                 ></Avatar>
               </Box>
@@ -61,6 +61,7 @@ export default function recentTracsactionsWeek({ mounthData }) {
                     fontFamily: "Inter",
                     fontSize: "12px",
                     marginTop: "10px",
+                    marginLeft: "10px",
                   }}
                 >
                   {item.category}
@@ -70,6 +71,7 @@ export default function recentTracsactionsWeek({ mounthData }) {
                     color: "#ABABAB",
                     fontFamily: "Inter",
                     fontSize: "12px",
+                    marginLeft: "10px",
                   }}
                 >
                   {formatDate(item.transactionDate)}
@@ -81,10 +83,11 @@ export default function recentTracsactionsWeek({ mounthData }) {
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography
                     sx={{
-                      color: item.spend === "type" ? "#76B5FF" : "#FF8484",
+                      color: item.type === "income" ? "#76B5FF" : "#FF8484",
                       fontFamily: "Inter",
                       fontSize: "12px",
-                      marginTop: "10px",
+                      marginTop: "15px",
+                      marginLeft: "5px",
                     }}
                   >
                     {item.percentage}%
