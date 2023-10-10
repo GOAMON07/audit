@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, Button, Box, Grid } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, NavLink } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import HistoryIcon from "@mui/icons-material/History";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -8,12 +8,11 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PersonIcon from "@mui/icons-material/Person";
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const [selectedButton, setSelectedButton] = useState("");
-
+  const location = useLocation();
+  const [selectedButton, setSelectedButton] = useState(location.pathname);
+// console.log(location);
   const handleButtonClick = (path) => {
     setSelectedButton(path);
-    navigate(path);
   };
 
   return (
@@ -34,6 +33,8 @@ export default function Navbar() {
         <Toolbar>
           <Grid item xs={12}>
             <Button
+              component={NavLink}
+              to="/Dasborad"
               variant="text"
               onClick={() => handleButtonClick("/Dasborad")}
               sx={{
@@ -54,11 +55,12 @@ export default function Navbar() {
           </Grid>
           <Grid item xs={12}>
             <Button
+              component={NavLink}
+              to="/Transcription"
               variant="text"
               onClick={() => handleButtonClick("/Transcription")}
               sx={{
-                color:
-                  selectedButton === "/Transcription" ? "#4E4E4E" : "#D9D9D9",
+                color: selectedButton === "/Transcription" ? "#4E4E4E" : "#D9D9D9",
               }}
             >
               <Box
@@ -75,13 +77,12 @@ export default function Navbar() {
           </Grid>
           <Grid item xs={12}>
             <Button
+              component={NavLink}
+              to="/AddTranscription"
               variant="text"
               onClick={() => handleButtonClick("/AddTranscription")}
               sx={{
-                color:
-                  selectedButton === "/AddTranscription"
-                    ? "#4E4E4E"
-                    : "#D9D9D9",
+                color: selectedButton === "/AddTranscription" ? "#4E4E4E" : "#D9D9D9",
               }}
             >
               <Box
@@ -100,10 +101,12 @@ export default function Navbar() {
           </Grid>
           <Grid item xs={12}>
             <Button
+              component={NavLink}
+              to="/UserWallet"
               variant="text"
-              onClick={() => handleButtonClick("budgets")}
+              onClick={() => handleButtonClick("/UserWallet")}
               sx={{
-                color: selectedButton === "budgets" ? "#4E4E4E" : "#D9D9D9",
+                color: selectedButton === "/UserWallet" ? "#4E4E4E" : "#D9D9D9",
               }}
             >
               <Box
@@ -114,12 +117,14 @@ export default function Navbar() {
                   alignItems: "center",
                 }}
               >
-                <LocalAtmIcon /> Budgets
+                <LocalAtmIcon /> Switch-Wallet
               </Box>
             </Button>
           </Grid>
           <Grid item xs={12}>
             <Button
+              component={NavLink}
+              to="/Account"
               variant="text"
               onClick={() => handleButtonClick("/Account")}
               sx={{

@@ -2,16 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { AppBar, Toolbar, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import HistoryIcon from "@mui/icons-material/History";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-import PersonIcon from "@mui/icons-material/Person";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import Loading from "../../Loading";
+import Navbar from "../Navbar/index";
 
 export default function index() {
   const navigate = useNavigate();
@@ -20,7 +15,7 @@ export default function index() {
   const [isLoading, setIsLoading] = useState(false);
   const token = localStorage.getItem("token");
   const getAcountData = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const responseAcount = await axios.get(
         "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/auth/account?userId=64dd0397eaebfbb752bcb1c7",
@@ -32,19 +27,26 @@ export default function index() {
       );
       if (responseAcount.status === 200) {
         const data = responseAcount.data.data;
-        console.log(data);
+
         setAcountData(data);
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
-      
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   });
   useEffect(() => {
     getAcountData();
   }, []);
+
+  const handleLogout = () => {
+    // Clear user data and token from local storage
+    localStorage.removeItem("userProfile");
+    localStorage.removeItem("token");
+    // Reload the page
+    window.location.reload();
+  };
 
   const handleButtonClick = (path) => {
     setSelectedButton(path);
@@ -182,6 +184,7 @@ export default function index() {
                   alignItems: "center",
                   marginLeft: "15px",
                   marginTop: "35px",
+                  cursor: "pointer",
                 }}
               >
                 <span
@@ -212,100 +215,9 @@ export default function index() {
                   alignItems: "center",
                   marginLeft: "15px",
                   marginTop: "35px",
+                  cursor: "pointer",
                 }}
-              >
-                <span
-                  style={{
-                    backgroundColor: "#D9D9D9",
-                    borderRadius: "50%",
-                    width: "26px",
-                    height: "25px",
-                    marginRight: "15px",
-                  }}
-                ></span>
-                <Typography
-                  sx={{
-                    fontFamily: "inter",
-                    fontSize: "15px",
-                    color: "#4E4E4E",
-                  }}
-                >
-                  Help & Support
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "15px",
-                  marginTop: "35px",
-                }}
-              >
-                <span
-                  style={{
-                    backgroundColor: "#D9D9D9",
-                    borderRadius: "50%",
-                    width: "26px",
-                    height: "25px",
-                    marginRight: "15px",
-                  }}
-                ></span>
-                <Typography
-                  sx={{
-                    fontFamily: "inter",
-                    fontSize: "15px",
-                    color: "#4E4E4E",
-                  }}
-                >
-                  Settings
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "15px",
-                  marginTop: "35px",
-                }}
-              >
-                <span
-                  style={{
-                    backgroundColor: "#D9D9D9",
-                    borderRadius: "50%",
-                    width: "26px",
-                    height: "25px",
-                    marginRight: "15px",
-                  }}
-                ></span>
-                <Typography
-                  sx={{
-                    fontFamily: "inter",
-                    fontSize: "15px",
-                    color: "#4E4E4E",
-                  }}
-                >
-                  Abount
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "15px",
-                  marginTop: "35px",
-                }}
-                onClick={() => {
-                  navigate("/");
-                }}
+                onClick={handleLogout}
               >
                 <span
                   style={{
@@ -330,138 +242,7 @@ export default function index() {
           </Box>
         </Box>
 
-        <AppBar
-          position="fixed"
-          sx={{
-            top: "auto",
-            bottom: 0,
-            width: "100%",
-            height: "60px",
-            backgroundColor: "#FFFFFF",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Toolbar>
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  onClick={() => handleButtonClick("/Dasborad")}
-                  sx={{
-                    color:
-                      selectedButton === "/Dasborad" ? "#4E4E4E" : "#D9D9D9",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <HomeIcon /> Home
-                  </Box>
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  onClick={() => handleButtonClick("/Transcription")}
-                  sx={{
-                    color:
-                      selectedButton === "/Transcription"
-                        ? "#4E4E4E"
-                        : "#D9D9D9",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <HistoryIcon /> Transactions
-                  </Box>
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  onClick={() => handleButtonClick("/AddTranscription")}
-                  sx={{
-                    color:
-                      selectedButton === "/AddTranscription"
-                        ? "#4E4E4E"
-                        : "#D9D9D9",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AddCircleIcon
-                      sx={{ width: "40px", height: "56px", color: "#52AA5E" }}
-                    />
-                  </Box>
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  onClick={() => handleButtonClick("budgets")}
-                  sx={{
-                    color: selectedButton === "budgets" ? "#4E4E4E" : "#D9D9D9",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <LocalAtmIcon /> Budgets
-                  </Box>
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  onClick={() => handleButtonClick("/Account")}
-                  sx={{
-                    color:
-                      selectedButton === "/Account" ? "#4E4E4E" : "#D9D9D9",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <PersonIcon /> Account
-                  </Box>
-                </Button>
-              </Grid>
-            </Toolbar>
-          </Box>
-        </AppBar>
+        <Navbar />
       </Box>
     </div>
   );

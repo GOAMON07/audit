@@ -16,8 +16,19 @@ const PrivateRoute = ({ children }) => {
 
   if (!token || !userProfile) {
     return <Navigate to="/Login" />;
-  } else if (!walletId) {
+  } else if (!userProfile || !walletId) {
     return <Navigate to="/UserWallet" />;
+  } else {
+    return children;
+  }
+};
+
+const PrivateRouteAddWallet = ({ children }) => {
+  const token = localStorage.getItem("token");
+  const userProfile = localStorage.getItem("userProfile");
+
+  if (!token || !userProfile) {
+    return <Navigate to="/Login" />;
   } else {
     return children;
   }
@@ -46,7 +57,7 @@ const RoutesPage = () => {
           <Route index element={<Navigate to="/Login" />} />
         </>
       ) : (
-        <Route path="/" element={<Navigate to="/" replace />} />
+        <Route path="/Login" element={<Navigate to="/" replace />} />
       )}
 
       <Route path="/" element={<Outlet />}>
@@ -79,9 +90,9 @@ const RoutesPage = () => {
         <Route
           path="/AddWallet"
           element={
-            <PrivateRoute>
+            <PrivateRouteAddWallet>
               <AddWallet />
-            </PrivateRoute>
+            </PrivateRouteAddWallet>
           }
         />
         <Route

@@ -1,10 +1,11 @@
 import Box from "@mui/material/Box";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useMemo } from "react";
 import _ from "lodash";
 import { Bar } from "react-chartjs-2";
-import { Chart, registerables} from 'chart.js/auto';
+import { Chart, registerables } from "chart.js/auto";
 
 Chart.register(...registerables);
 
@@ -16,7 +17,7 @@ export default function BarChartWeek({ weekData }) {
         ?.filter((item) => item.type === "outcome")
         ?.map((item) => item.amount);
     return _.sum(outcomeAmounts ?? 0) ?? 0;
-  }, [weekData?.thisWeek]);
+  }, [weekData]);
 
   const totalSpentLastWeek = useMemo(() => {
     const outcomeLastWeekAmounts =
@@ -26,7 +27,7 @@ export default function BarChartWeek({ weekData }) {
         ?.map((item) => item.amount);
 
     return _.sum(outcomeLastWeekAmounts ?? 0) ?? 0;
-  }, [weekData?.lastWeek]);
+  }, [weekData]);
 
   const percentageSpendingWeek = (
     (totalSpentThisWeek / totalSpentLastWeek) *
@@ -78,7 +79,10 @@ export default function BarChartWeek({ weekData }) {
                   fontFamily: "inter",
                 }}
               >
-                {isNaN(percentageSpendingWeek) ? 0 : percentageSpendingWeek} %
+                {percentageSpendingWeek === "Infinity"
+                  ? 0
+                  : percentageSpendingWeek}
+                %
               </Typography>
             </Box>
             <Box>

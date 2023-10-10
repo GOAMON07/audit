@@ -2,19 +2,16 @@ import customAxios from "../../setup/customAxios";
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
-const GETDATATRANSACTION = `/api/transaction`;
+const GETDATAACCOUNT = `/api/auth/account`;
 const dataFromLocalStroage = localStorage.getItem("userProfile");
 const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
+const userId = JSON.parse(dataFromLocalStroage)?.userId ?? "0";
 
-export async function getDataTransactionAPI(dateTimes) {
-  const dataFromLocalStroage = localStorage.getItem("userProfile");
-  const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
+export async function getDataAccountAPI() {
   try {
-    const res = await customAxios.get(
-      `${GETDATATRANSACTION}?startDate=${dateTimes.startDate}&endDate=${dateTimes.endDate}&walletId=${walletId}`
-    );
+    const res = await customAxios.get(`${GETDATAACCOUNT}?userId=${userId}`);
     if (!res.data) {
-      throw new Error("func=getDataTransactionAPI,error=Data Error");
+      throw new Error("func=getDataAccountAPI,error=Data Error");
     }
     // if (!walletId) {
     //   <Navigate to="/UserWallet" replace />;
@@ -28,7 +25,7 @@ export async function getDataTransactionAPI(dateTimes) {
       console.log("Request canceled : ", error?.message);
       return null;
     } else {
-      throw new Error("func=getDataTransactionAPI,error=", error);
+      throw new Error("func=getDataAccountAPI,error=", error);
     }
   }
 }
