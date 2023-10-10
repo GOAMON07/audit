@@ -51,6 +51,8 @@ export default function dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [dataWallet, setDataWallet] = useState("");
+  const dataFromLocalStroage = localStorage.getItem("userProfile");
+  const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
 
   const classes = useStyles();
 
@@ -78,7 +80,6 @@ export default function dashboard() {
 
       if (response.status === "success") {
         setTransactions(response.data);
-        console.log(response.data);
       } else {
         console.log("ไม่สามารถดึงข้อมูลได้");
       }
@@ -94,14 +95,14 @@ export default function dashboard() {
     try {
       const res = await getDataWalletAPI();
       if (res) {
-        setDataWallet(res[0]);
+        setDataWallet(res);
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading]);
+  }, []);
 
   useEffect(() => {
     getAmountData();
@@ -344,19 +345,13 @@ export default function dashboard() {
                       marginTop: "10px",
                     }}
                   >
-                    {!transactions?.thisWeek?.length ? (
-                      <div style={{ color: "#6D6D6D", fontSize: "12px" }}>
-                        NO TOP SPENDING DATA
-                      </div>
-                    ) : (
-                      <div>
-                        {selectedButton === "week" ? (
-                          <SpendingCardWeek weekData={transactions} />
-                        ) : (
-                          <SpendingCardMounth mounthData={transactions} />
-                        )}
-                      </div>
-                    )}
+                    <div>
+                      {selectedButton === "week" ? (
+                        <SpendingCardWeek weekData={transactions} />
+                      ) : (
+                        <SpendingCardMounth mounthData={transactions} />
+                      )}
+                    </div>
                   </Box>
                 </Grid>
               </Grid>
@@ -404,19 +399,13 @@ export default function dashboard() {
                     backgroundColor: "#FFFFFF",
                   }}
                 >
-                  {!transactions?.thisWeek?.length ? (
-                    <div style={{ color: "#6D6D6D", fontSize: "12px" }}>
-                      NO TOP SPENDING DATA
-                    </div>
-                  ) : (
-                    <div>
-                      {selectedButton === "week" ? (
-                        <RecentTransactionWeek weekData={transactions} />
-                      ) : (
-                        <RecentTransactionMounth mounthData={transactions} />
-                      )}
-                    </div>
-                  )}
+                  <div>
+                    {selectedButton === "week" ? (
+                      <RecentTransactionWeek weekData={transactions} />
+                    ) : (
+                      <RecentTransactionMounth mounthData={transactions} />
+                    )}
+                  </div>
                 </Box>
               </Grid>
             </Grid>

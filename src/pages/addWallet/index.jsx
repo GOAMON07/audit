@@ -11,9 +11,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { set } from "lodash";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Loading from "../../Loading/index";
 
 const validationSchema = Yup.object().shape({
   walletName: Yup.string().required("กรุณากรอกข้อมูลของท่าน"),
@@ -28,29 +28,26 @@ const initialValues = {
 export default function AddWallet() {
   const [walletName, setWalletName] = useState("");
   const [detail, setDetail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   let navigate = useNavigate();
-
   const submitAddData = useCallback(async () => {
     const token = localStorage.getItem("token");
     const data = localStorage.getItem("userProfile");
     const { userId } = JSON.parse(data);
 
-    setIsLoading(true);
     try {
       const response = await axios.post(
         "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/wallet",
-        { walletName, detail, userId },
+        {
+          walletName: walletName,
+          detail: detail,
+          userId,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      if (response.status === 200) {
-        setIsLoading(true);
-      }
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -68,8 +65,8 @@ export default function AddWallet() {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      submitAddData(values.username, values.lastname, values.age);
+    onSubmit: () => {
+      submitAddData(formik.values.walletName, formik.values.detail);
     },
   });
 
@@ -177,7 +174,10 @@ export default function AddWallet() {
                             sx: { color: "#D9D9D9" },
                           }}
                           value={formik.values.walletName}
-                          onChange={formik.handleChange}
+                          onChange={(e) => {
+                            formik.handleChange(e);
+                            setWalletName(e.target.value); // อัปเดตค่า walletName ให้ตรงกับค่าที่กรอก
+                          }}
                           name="walletName"
                         />
                         {formik?.touched.walletName &&
@@ -211,7 +211,10 @@ export default function AddWallet() {
                             sx: { color: "#D9D9D9" },
                           }}
                           value={formik.values.detail}
-                          onChange={formik.handleChange}
+                          onChange={(e) => {
+                            formik.handleChange(e);
+                            setDetail(e.target.value); // อัปเดตค่า detail ให้ตรงกับค่าที่กรอก
+                          }}
                           name="detail"
                         />
                         {formik?.touched.detail && formik?.errors.detail && (

@@ -27,7 +27,7 @@ export default function index() {
       );
       if (responseAcount.status === 200) {
         const data = responseAcount.data.data;
-        console.log(data);
+
         setAcountData(data);
       }
     } catch (error) {
@@ -185,7 +185,6 @@ export default function index() {
                   marginLeft: "15px",
                   marginTop: "35px",
                   cursor: "pointer",
-                  
                 }}
               >
                 <span

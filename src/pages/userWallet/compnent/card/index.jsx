@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import Loading from "../../../../Loading/index";
 import dayjs from "dayjs";
 
-export default function BasicCard({ createWallet,setReload }) {
+export default function BasicCard({ createWallet, setReload }) {
   const token = localStorage.getItem("token");
   let navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +55,6 @@ export default function BasicCard({ createWallet,setReload }) {
   // }, [idWallet]);
 
   const deleted = async (walletId) => {
-    console.log(token);
     setIsLoading(true);
     try {
       const response = await axios.put(
@@ -69,7 +68,8 @@ export default function BasicCard({ createWallet,setReload }) {
       );
 
       if (response.status === 200) {
-        setReload(dayjs().unix())
+        setReload(dayjs().unix());
+
         Swal.fire({
           icon: "success",
           title: "ข้อความ.",
@@ -115,9 +115,6 @@ export default function BasicCard({ createWallet,setReload }) {
                   cursor: "pointer",
                 },
               }}
-              onClick={() => {
-                handleWalletClick(createWallet.walletId);
-              }}
             >
               <Box sx={{ display: "flex" }}>
                 <Grid container spacing={1}>
@@ -141,7 +138,12 @@ export default function BasicCard({ createWallet,setReload }) {
                   <CloseIcon sx={{ color: "-moz-initial" }} />
                 </IconButton>
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+              <Box
+                sx={{ display: "flex", justifyContent: "flex-start" }}
+                onClick={() => {
+                  handleWalletClick(createWallet.walletId);
+                }}
+              >
                 <Grid container spacing={1}>
                   <Grid item xs={12}>
                     <Box>

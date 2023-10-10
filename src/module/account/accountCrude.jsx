@@ -13,11 +13,11 @@ export async function getDataAccountAPI() {
     if (!res.data) {
       throw new Error("func=getDataAccountAPI,error=Data Error");
     }
-    if (!walletId) {
-      <Navigate to="/UserWallet" replace />;
-    } else {
-      <Navigate to="/Login" replace />;
-    }
+    // if (!walletId) {
+    //   <Navigate to="/UserWallet" replace />;
+    // } else {
+    //   <Navigate to="/Login" replace />;
+    // }
 
     return res.data;
   } catch (error) {

@@ -76,11 +76,9 @@ export default function user() {
                     height: "29px",
                     backgroundColor: "#52AA5E",
                     borderColor: "#FFF",
-                    padding: "16px",
                     "&:hover": {
                       backgroundColor: "#52AA5E",
                     },
-
                     marginRight: "15px",
                   }}
                   onClick={() => {
@@ -110,8 +108,12 @@ export default function user() {
                   alignItems: "center",
                 }}
               >
-                {walletData.map((item, key) => {
-                  return <Card createWallet={item} setReload={setReload} />;
+                {walletData.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <Card createWallet={item} setReload={setReload} />
+                    </div>
+                  );
                 })}
               </Box>
             </Grid>

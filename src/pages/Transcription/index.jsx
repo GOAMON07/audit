@@ -1,9 +1,7 @@
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Navbar from "../Navbar";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
-import Loading from "../../Loading";
 import _ from "lodash";
 
 import Typography from "@mui/material/Typography";
@@ -45,8 +43,8 @@ export default function index() {
     try {
       const res = await getDataWalletAPI();
       if (res) {
-        setDataWallet(res[0]);
-        console.log("ข้อมูลที่ได้จาก wallet", res[0].walletName);
+        setDataWallet(res);
+        
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);

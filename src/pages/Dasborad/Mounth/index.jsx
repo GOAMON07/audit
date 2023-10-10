@@ -32,10 +32,7 @@ export default function BarChartMounth({ mounthData }) {
     (totalSpentThisMounth / totalSpentLastMounth) *
     100
   ).toFixed(0);
-  useEffect(() => {
-   console.log("assssssss",mounthData);
-  }, [])
-  
+ 
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -82,7 +79,7 @@ export default function BarChartMounth({ mounthData }) {
                   fontFamily: "inter",
                 }}
               >
-                {isNaN(percentageSpendingMounth) ? 0 : percentageSpendingMounth} %
+                {percentageSpendingMounth === "Infinity" ? 0 : percentageSpendingMounth} %
               </Typography>
             </Box>
             <Box>

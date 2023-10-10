@@ -7,6 +7,8 @@ const dataFromLocalStroage = localStorage.getItem("userProfile");
 const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
 
 export async function getDataTransactionAPI(dateTimes) {
+  const dataFromLocalStroage = localStorage.getItem("userProfile");
+  const walletId = JSON.parse(dataFromLocalStroage)?.idWallet ?? "0";
   try {
     const res = await customAxios.get(
       `${GETDATATRANSACTION}?startDate=${dateTimes.startDate}&endDate=${dateTimes.endDate}&walletId=${walletId}`
@@ -14,11 +16,11 @@ export async function getDataTransactionAPI(dateTimes) {
     if (!res.data) {
       throw new Error("func=getDataTransactionAPI,error=Data Error");
     }
-    if (!walletId) {
-      <Navigate to="/UserWallet" replace />;
-    } else {
-      <Navigate to="/Login" replace />;
-    }
+    // if (!walletId) {
+    //   <Navigate to="/UserWallet" replace />;
+    // } else {
+    //   <Navigate to="/Login" replace />;
+    // }
 
     return res.data;
   } catch (error) {

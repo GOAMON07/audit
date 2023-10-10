@@ -40,9 +40,9 @@ export default function index({ tabs, ...rest }) {
     setCurrentTabs(reversTabs);
   }, [reversTabs]);
 
-  useEffect(() => {
-    console.log("currentSwiper", currentSwiper?.length);
-  }, [currentSwiper]);
+  // useEffect(() => {
+  //   console.log("currentSwiper", currentSwiper?.length);
+  // }, [currentSwiper]);
 
   useEffect(() => {
     sliderRefContent.current.swiper.slideTo(currentSwiper); //ศึกษาเพิ่ม
@@ -59,7 +59,7 @@ export default function index({ tabs, ...rest }) {
       setIsLoading(true);
       const res = await getDataTransactionAPI(stateDataDate);
       if (res.status === "success") {
-        console.log("ข้อมูลtransaction", res);
+        
         setTransactionData(res);
       }
     } catch (error) {
@@ -84,10 +84,10 @@ export default function index({ tabs, ...rest }) {
       });
     }
     // getDataTransaction(dataTabs);
-    console.log("ข้อมูลเริ่มต้น",tabs);
-    console.log("วันที่ส่ง",dataTabs?.start);
-    console.log("ข้อมูลที่เราอยากจะใช้",reversTabs);
-    console.log("ข้อมูลที่ส่งไปใช้", reversTabs[currentSwiper]);
+    // console.log("ข้อมูลเริ่มต้น",tabs);
+    // console.log("วันที่ส่ง",dataTabs?.start);
+    // console.log("ข้อมูลที่เราอยากจะใช้",reversTabs);
+    // console.log("ข้อมูลที่ส่งไปใช้", reversTabs[currentSwiper]);
   }, [currentSwiper, reversTabs]);
 
   const getTabs = useCallback(() => {
@@ -99,7 +99,7 @@ export default function index({ tabs, ...rest }) {
               const find = tabs.find((item) => {
                 return item.id === index;
               });
-              console.log("ข้อมูลที่ค้นหา ของ taps",find);
+              // console.log("ข้อมูลที่ค้นหา ของ taps",find);
               setDataDate({
                 startDate: find.start,
                 endDate: find.end,
@@ -135,8 +135,8 @@ export default function index({ tabs, ...rest }) {
             const find = tabs.find((item2) => {
               return item2.id === item.activeIndex;
             });
-            console.log("ข้อมูลที่ค้นหา ของ card",find);
-            console.log("active slide",item);
+            // console.log("ข้อมูลที่ค้นหา ของ card",find);
+            // console.log("active slide",item);
             setCurentSwiper(item.activeIndex);
             setDataDate({
               startDate: find.start,
@@ -175,6 +175,13 @@ export default function index({ tabs, ...rest }) {
     );
   }, [currentSwiper, reversTabs, transactionData]);
 
+  // useEffect(() => {
+  //   console.log("tabbbbbbbbb",reversTabs[currentSwiper]);
+  //   console.log("tabbbbbbbbb",reversTabs);
+  //   console.log("tabbbbbbbbb",currentSwiper);
+  // }, [tabs])
+  
+
   return (
     <div>
       
@@ -186,7 +193,7 @@ export default function index({ tabs, ...rest }) {
             slidesPerView="auto"
             autoHeight
             spaceBetween={8}
-            onSlideChange={(item) => {
+            onSlideChange={(item,key) => {
               setCurentSwiper(item.activeIndex);
             }}
             ref={sliderRefMenu}

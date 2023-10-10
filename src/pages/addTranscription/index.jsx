@@ -54,7 +54,7 @@ export default function Index() {
     const formattedDate = dayjs(transactionDate).format("YYYY-MM-DD");
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await axios.post(
         "https://us-central1-audit-396115.cloudfunctions.net/expressApi/api/transaction",
         {
@@ -73,7 +73,6 @@ export default function Index() {
         }
       );
 
-      console.log(response);
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
@@ -86,9 +85,9 @@ export default function Index() {
         title: "...เกิดข้อผิดพลาด",
         text: "การเพิ่มข้อมูลของท่านไม่ถูกต้อง",
       });
-    }finally{
-      setIsLoading(false)
-      navigate("/Dasborad")
+    } finally {
+      setIsLoading(false);
+      navigate("/Dasborad");
     }
   }, [amount, description, transactionDate]);
 
